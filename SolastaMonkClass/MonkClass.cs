@@ -36,37 +36,18 @@ namespace SolastaMonkClass
         static public Dictionary<int, NewFeatureDefinitions.MovementBonusBasedOnEquipment> unarmored_movement_improvements = new Dictionary<int, NewFeatureDefinitions.MovementBonusBasedOnEquipment>();
         static List<int> unarmored_movement_improvement_levels = new List<int> { 6, 10, 14, 18 };
         static public NewFeatureDefinitions.IncreaseNumberOfPowerUsesPerClassLevel ki;
+        static public ConditionDefinition flurry_of_blows_condition;
         static public NewFeatureDefinitions.PowerWithRestrictions flurry_of_blows;
         static public NewFeatureDefinitions.PowerWithRestrictions patient_defense;
         static public NewFeatureDefinitions.PowerWithRestrictions step_of_the_wind;
-
-        static Dictionary<int, int> rage_bonus_damage_level_map = new Dictionary<int, int> { { 2, 1 }, { 3, 9 }, { 4, 16 } };
-        static List<int> rage_uses_increase_levels = new List<int> { 3, 6, 12, 17 };
-        
-        static public NewFeatureDefinitions.SpellcastingForbidden rage_spellcasting_forbiden;
-        static public Dictionary<int, NewFeatureDefinitions.PowerWithRestrictions> rage_powers = new Dictionary<int, NewFeatureDefinitions.PowerWithRestrictions>();
-        static public Dictionary<int, NewFeatureDefinitions.IncreaseNumberOfPowerUses> rage_power_extra_use = new Dictionary<int, NewFeatureDefinitions.IncreaseNumberOfPowerUses>();
+        static public FeatureDefinitionFeatureSet deflect_missiles;
         static public FeatureDefinitionAttributeModifier extra_attack;
 
-        //Frozen Fury
-        static NewFeatureDefinitions.ApplyPowerOnTurnEndBasedOnClassLevel frozen_fury_rage_feature;
-        static public FeatureDefinition frozen_fury;
-        static public NewFeatureDefinitions.ArmorBonusAgainstAttackType frigid_body;
-        static public FeatureDefinitionFeatureSet numb;
-        //War Shaman
-        static public SpellListDefinition war_shaman_spelllist;
-        static public FeatureDefinitionCastSpell war_shaman_spellcasting;
-        static public Dictionary<int, NewFeatureDefinitions.PowerWithRestrictions> share_rage_powers = new Dictionary<int, NewFeatureDefinitions.PowerWithRestrictions>();
-        static public FeatureDefinition ragecaster;
-
-
-        //Berserker
-        //frenzy
-        static public NewFeatureDefinitions.PowerWithRestrictions frenzy;
-        static public ConditionDefinition exhausted_after_frenzy_condition;
-        static public FeatureDefinitionFeatureSet mindless_rage;
-        static public FeatureDefinitionPower intimidating_presence;
-        static public FeatureDefinitionFeatureSet intimidating_presence_feature;
+        //way of the open hand
+        static public FeatureDefinitionFeatureSet open_hand_technique;
+        static public NewFeatureDefinitions.PowerWithRestrictions open_hand_technique_knock;
+        static public NewFeatureDefinitions.PowerWithRestrictions open_hand_technique_push;
+        static public NewFeatureDefinitions.PowerWithRestrictions open_hand_technique_forbid_reaction;
 
         static public CharacterClassDefinition monk_class;
 
@@ -172,7 +153,7 @@ namespace SolastaMonkClass
             createMartialArts();
             createUnarmoredMovement();
             createKi();
-            createRage();
+            createDeflectMissiles();
             createExtraAttack();
             Definition.FeatureUnlocks.Clear();
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(saving_throws, 1));
@@ -185,6 +166,7 @@ namespace SolastaMonkClass
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(flurry_of_blows, 2));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(patient_defense, 2));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(step_of_the_wind, 2));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(deflect_missiles, 3));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 4));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(extra_attack, 5));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(unarmored_movement_improvements[6], 6));
@@ -197,9 +179,37 @@ namespace SolastaMonkClass
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 19));
 
             var subclassChoicesGuiPresentation = new GuiPresentation();
-            subclassChoicesGuiPresentation.Title = "Subclass/&MonkSubclassPrimalPathTitle";
-            subclassChoicesGuiPresentation.Description = "Subclass/&MonkSubclassPrimalPathDescription";
-            MonkFeatureDefinitionSubclassChoice = this.BuildSubclassChoice(3, "PrimalPath", false, "SubclassChoiceMonkSpecialistArchetypes", subclassChoicesGuiPresentation, MonkClassSubclassesGuid);
+            subclassChoicesGuiPresentation.Title = "Subclass/&MonkSubclassMonasticTraditionTitle";
+            subclassChoicesGuiPresentation.Description = "Subclass/&MonkSubclassMonasticTraditionDescription";
+            MonkFeatureDefinitionSubclassChoice = this.BuildSubclassChoice(3, "MonasticTradition", false, "SubclassChoiceMonkSpecialistArchetypes", subclassChoicesGuiPresentation, MonkClassSubclassesGuid);
+        }
+
+
+        static void createDeflectMissiles()
+        {
+            string deflect_missiles_title_string = "Feature/&MonkClassDeflectMissilesTitle";
+            string deflect_missiles_description_string = "Feature/&MonkClassDeflectMissilesDescription";
+
+            var deflect_missiles_affinity = Helpers.CopyFeatureBuilder<FeatureDefinitionActionAffinity>.createFeatureCopy("MonkClassDeflectMissilesActionAffinity",
+                                                                                                                          "",
+                                                                                                                          "",
+                                                                                                                          "",
+                                                                                                                          null,
+                                                                                                                          DatabaseHelper.FeatureDefinitionActionAffinitys.ActionAffinityUncannyDodge,
+                                                                                                                          a =>
+                                                                                                                          {
+                                                                                                                              a.authorizedActions = new List<ActionDefinitions.Id> { ActionDefinitions.Id.DeflectMissile };
+                                                                                                                          }
+                                                                                                                          );
+
+            deflect_missiles = Helpers.FeatureSetBuilder.createFeatureSet("MonkClassDeflectMissiles",
+                                                                         "",
+                                                                         deflect_missiles_title_string,
+                                                                         deflect_missiles_description_string,
+                                                                         false,
+                                                                         FeatureDefinitionFeatureSet.FeatureSetMode.Union,
+                                                                         deflect_missiles_affinity
+                                                                         );
         }
 
 
@@ -402,17 +412,17 @@ namespace SolastaMonkClass
                                                                                                                     }
                                                                                                                     );
 
-            var flurry_of_blows_condition = Helpers.ConditionBuilder.createConditionWithInterruptions("MonkClassFlurryOfBlowsCondition",
-                                                                                     "",
-                                                                                     flurry_of_blows_title_string,
-                                                                                     flurry_of_blows_description_string,
-                                                                                     null,
-                                                                                     DatabaseHelper.ConditionDefinitions.ConditionHasted,
-                                                                                     new RuleDefinitions.ConditionInterruption[] {RuleDefinitions.ConditionInterruption.AnyBattleTurnEnd },
-                                                                                     unarmed_attack,
-                                                                                     DatabaseHelper.FeatureDefinitionAttributeModifiers.AttributeModifierFighterExtraAttack,
-                                                                                     flurry_of_blows_feature_extra_attack
-                                                                                     );
+            flurry_of_blows_condition = Helpers.ConditionBuilder.createConditionWithInterruptions("MonkClassFlurryOfBlowsCondition",
+                                                                                                  "",
+                                                                                                  flurry_of_blows_title_string,
+                                                                                                  flurry_of_blows_description_string,
+                                                                                                  null,
+                                                                                                  DatabaseHelper.ConditionDefinitions.ConditionHasted,
+                                                                                                  new RuleDefinitions.ConditionInterruption[] {RuleDefinitions.ConditionInterruption.AnyBattleTurnEnd },
+                                                                                                  unarmed_attack,
+                                                                                                  DatabaseHelper.FeatureDefinitionAttributeModifiers.AttributeModifierFighterExtraAttack,
+                                                                                                  flurry_of_blows_feature_extra_attack
+                                                                                                  );
             flurry_of_blows_condition.SetSubsequentOnRemoval(null);
             var effect = new EffectDescription();
             effect.Copy(DatabaseHelper.SpellDefinitions.Haste.EffectDescription);
@@ -620,609 +630,87 @@ namespace SolastaMonkClass
         }
 
 
-        static void createRage()
+        static void createOpenHandTechnique()
         {
-            string rage_title_string = "Feature/&MonkClassRagePowerTitle";
-            string rage_description_string = "Feature/&MonkClassRagePowerDescription";
-            string rage_condition_string = "Rules/&MonkClassRageCondition";
+            string open_hand_technique_title_string = "Feature/&MonkSubclassWayOfTheOpenHandTechniqueTitle";
+            string open_hand_technique_description_string = "Feature/&MonkSubclassWayOfTheOpenHandTechniqueDescription";
 
-            rage_spellcasting_forbiden = Helpers.FeatureBuilder<NewFeatureDefinitions.SpellcastingForbidden>.createFeature("MonkClassRageSpellcastingForbidden",
-                                                                                                                           "",
-                                                                                                                           Common.common_no_title,
-                                                                                                                           Common.common_no_title,
-                                                                                                                           Common.common_no_icon,
-                                                                                                                           r =>
-                                                                                                                           {
-                                                                                                                               r.exceptionFeatures = new List<FeatureDefinition>();
-                                                                                                                           }
-                                                                                                                           );
+            var open_hand_used_condition = Helpers.ConditionBuilder.createConditionWithInterruptions("MonkSubclassWayOfTheOpenHandUsedCondition",
+                                                                                                    "",
+                                                                                                    "",
+                                                                                                    "",
+                                                                                                    null,
+                                                                                                    DatabaseHelper.ConditionDefinitions.ConditionDummy,
+                                                                                                    new RuleDefinitions.ConditionInterruption[] {RuleDefinitions.ConditionInterruption.AttacksAndDamages }
+                                                                                                    );
+            NewFeatureDefinitions.ConditionsData.no_refresh_conditions.Add(open_hand_used_condition);
+                                                                                                         
+            createOpenHandTechniqueKnock();
+            createOpenHandTechniquePush();
+            createOpenHandTechniqueForbidReaction();
 
-            var condition_can_continue_rage = Helpers.ConditionBuilder.createConditionWithInterruptions("MonkClassCanContinueRageCondition",
-                                                                                                          "",
-                                                                                                          "Rules/&MonkClassCanContinueRageCondition",
-                                                                                                          Common.common_no_title,
-                                                                                                          Common.common_no_icon,
-                                                                                                          DatabaseHelper.ConditionDefinitions.ConditionHeroism,
-                                                                                                          new RuleDefinitions.ConditionInterruption[] { }
-                                                                                                          );
-            condition_can_continue_rage.SetSilentWhenAdded(true);
-            condition_can_continue_rage.SetSilentWhenRemoved(true);
+            var open_hand_used_feature = Helpers.FeatureBuilder<NewFeatureDefinitions.ApplyConditionOnPowerUseToSelf>.createFeature("MonkSubclassWayOfTheOpenHandUsedCondition",
+                                                                                                                                      "",
+                                                                                                                                      Common.common_no_title,
+                                                                                                                                      Common.common_no_title,
+                                                                                                                                      Common.common_no_icon,
+                                                                                                                                      a =>
+                                                                                                                                      {
+                                                                                                                                          a.condition = open_hand_used_condition;
+                                                                                                                                          a.durationType = RuleDefinitions.DurationType.Round;
+                                                                                                                                          a.durationValue = 1;
+                                                                                                                                          a.powers = new List<FeatureDefinitionPower> { open_hand_technique_knock, open_hand_technique_push, open_hand_technique_forbid_reaction };
 
-            NewFeatureDefinitions.PowerWithRestrictions previous_power = null;
 
-            foreach (var kv in rage_bonus_damage_level_map)
-            {
-                var damage_bonus = Helpers.FeatureBuilder<NewFeatureDefinitions.WeaponDamageBonusWithSpecificStat>.createFeature("MonkClassRageDamageBonus" + kv.Value.ToString(),
-                                                                                                                   "",
-                                                                                                                   rage_condition_string,
-                                                                                                                   rage_condition_string,
-                                                                                                                   null,
-                                                                                                                   d =>
-                                                                                                                   {
-                                                                                                                       d.value = kv.Key;
-                                                                                                                       d.attackStat = Helpers.Stats.Strength;
-                                                                                                                   }
-                                                                                                                   );
+                                                                                                                                      }
+                                                                                                                                      );
 
-                var rage_condition = Helpers.ConditionBuilder.createConditionWithInterruptions("MonkClassRageCondition" + kv.Value.ToString(),
-                                                                                          "",
-                                                                                          rage_condition_string,
-                                                                                          rage_description_string,
-                                                                                          null,
-                                                                                          DatabaseHelper.ConditionDefinitions.ConditionHeroism,
-                                                                                          new RuleDefinitions.ConditionInterruption[] { },
-                                                                                          DatabaseHelper.FeatureDefinitionDamageAffinitys.DamageAffinityBludgeoningResistance,
-                                                                                          DatabaseHelper.FeatureDefinitionDamageAffinitys.DamageAffinityPiercingResistance,
-                                                                                          DatabaseHelper.FeatureDefinitionDamageAffinitys.DamageAffinitySlashingResistance,
-                                                                                          DatabaseHelper.FeatureDefinitionAbilityCheckAffinitys.AbilityCheckAffinityConditionBullsStrength,
-                                                                                          damage_bonus,
-                                                                                          rage_spellcasting_forbiden
-                                                                                          );
 
-                var rage_watcher = Helpers.FeatureBuilder<NewFeatureDefinitions.RageWatcher>.createFeature("MonkClassRageAttackWatcher" + kv.Value.ToString(),
-                                                                                               "",
-                                                                                               Common.common_no_title,
-                                                                                               Common.common_no_title,
-                                                                                               null,
-                                                                                               r =>
-                                                                                               {
-                                                                                                   r.requiredCondition = condition_can_continue_rage;
-                                                                                                   r.conditionToRemove = rage_condition;
-                                                                                               }
-                                                                                               );
-
-                rage_condition.Features.Add(rage_watcher);
-
-                var effect = new EffectDescription();
-                effect.Copy(DatabaseHelper.FeatureDefinitionPowers.PowerDomainBattleHeraldOfBattle.EffectDescription);
-                effect.SetRangeType(RuleDefinitions.RangeType.Self);
-                effect.SetRangeParameter(1);
-                effect.DurationParameter = 1;
-                effect.DurationType = RuleDefinitions.DurationType.Minute;
-                effect.EffectForms.Clear();
-                effect.SetTargetType(RuleDefinitions.TargetType.Self);
-
-                var effect_form = new EffectForm();
-                effect_form.ConditionForm = new ConditionForm();
-                effect_form.FormType = EffectForm.EffectFormType.Condition;
-                effect_form.ConditionForm.Operation = ConditionForm.ConditionOperation.Add;
-                effect_form.ConditionForm.ConditionDefinition = rage_condition;
-                effect.EffectForms.Add(effect_form);
-
-                var rage_power = Helpers.GenericPowerBuilder<NewFeatureDefinitions.PowerWithRestrictions>
-                                                          .createPower("MonkClassRagePower" + kv.Value.ToString(),
-                                                             "",
-                                                             Helpers.StringProcessing.appendToString(rage_title_string,
-                                                                                                             rage_title_string + kv.Value.ToString(),
-                                                                                                             $" (+{kv.Key})"),
-                                                             rage_description_string,
-                                                             //DatabaseHelper.FeatureDefinitionPowers.PowerDomainBattleDivineWrath.GuiPresentation.SpriteReference,
-                                                             DatabaseHelper.SpellDefinitions.Heroism.GuiPresentation.SpriteReference,
-                                                             effect,
-                                                             RuleDefinitions.ActivationTime.BonusAction,
-                                                             2 + rage_uses_increase_levels.Count(l => l < kv.Value),
-                                                             RuleDefinitions.UsesDetermination.Fixed,
-                                                             RuleDefinitions.RechargeRate.LongRest
-                                                             );
-                rage_power.restrictions = new List<NewFeatureDefinitions.IRestriction>()
-                {
-                    new NewFeatureDefinitions.InBattleRestriction(),
-                    new NewFeatureDefinitions.NoConditionRestriction(condition_can_continue_rage),
-                    new NewFeatureDefinitions.ArmorTypeRestriction(DatabaseHelper.ArmorCategoryDefinitions.HeavyArmorCategory, inverted: true)
-                };
-
-                rage_power.SetShortTitleOverride(rage_title_string);
-                if (previous_power != null)
-                {
-                    rage_power.SetOverriddenPower(previous_power);
-                }
-                previous_power = rage_power;
-                rage_powers.Add(kv.Value, rage_power);
-            }
-
-            string rage_extra_use_title_string = "Feature/&MonkClassRageExtraUseTitle";
-            string rage_extra_use_description_string = "Feature/&MonkClassRageExtraUseDescription";
-
-            foreach (var l in rage_uses_increase_levels)
-            {
-                var feature = Helpers.FeatureBuilder<NewFeatureDefinitions.IncreaseNumberOfPowerUses>.createFeature("MonkClassExtraRage" + l.ToString(),
-                                                                                                                    "",
-                                                                                                                    rage_extra_use_title_string,
-                                                                                                                    rage_extra_use_description_string,
-                                                                                                                    null,
-                                                                                                                    f =>
-                                                                                                                    {
-                                                                                                                        f.value = 1;
-                                                                                                                        f.powers = rage_powers.Where(kv => kv.Key < l).Select(kv => kv.Value)
-                                                                                                                                        .Cast<FeatureDefinitionPower>().ToList();
-                                                                                                                    }
-                                                                                                                    );
-                rage_power_extra_use.Add(l, feature);
-            }
+            open_hand_technique = Helpers.FeatureSetBuilder.createFeatureSet("MonkSubclassWayOfTheOpenHandTechnique",
+                                                                             "",
+                                                                             open_hand_technique_title_string,
+                                                                             open_hand_technique_description_string,
+                                                                             false,
+                                                                             FeatureDefinitionFeatureSet.FeatureSetMode.Union,
+                                                                             false,
+                                                                             open_hand_technique_knock,
+                                                                             open_hand_technique_push,
+                                                                             open_hand_technique_forbid_reaction,
+                                                                             open_hand_used_feature
+                                                                             );
+            open_hand_technique_knock.restrictions.Add(new NewFeatureDefinitions.NoConditionRestriction(open_hand_used_condition));
+            open_hand_technique_push.restrictions.Add(new NewFeatureDefinitions.NoConditionRestriction(open_hand_used_condition));
+            open_hand_technique_forbid_reaction.restrictions.Add(new NewFeatureDefinitions.NoConditionRestriction(open_hand_used_condition));
         }
 
 
-        static CharacterSubclassDefinition createPathOfFrozenFury()
+        static void createOpenHandTechniqueForbidReaction()
         {
-            createWintersFury();
-            createFrigidBody();
-            createNumb();
+            string open_hand_forbid_reaction_title_string = "Feature/&MonkSubclassWayOfTheOpenHandForbidReactionTitle";
+            string open_hand_forbid_reaction_description_string = "Feature/&MonkSubclassWayOfTheOpenHandForbidReactionDescription";
+            string use_open_hand_forbid_reaction_react_description = "Reaction/&SpendMonkSubclassWayOfTheOpenHandForbidReactionPowerReactDescription";
+            string use_open_hand_forbid_reaction_react_title = "Reaction/&CommonUsePowerReactTitle";
 
-            var gui_presentation = new GuiPresentationBuilder(
-                    "Subclass/&MonkSubclassPrimalPathOfFrozenFuryDescription",
-                    "Subclass/&MonkSubclassPrimalPathOfFrozenFuryTitle")
-                    .SetSpriteReference(DatabaseHelper.CharacterSubclassDefinitions.DomainElementalCold.GuiPresentation.SpriteReference)
-                    .Build();
+            string open_hand_forbid_reaction_condition_title_string = "Rules/&ConditionMonkSubclassWayOfTheOpenHandForbidReactionPowerTitle";
+            string open_hand_forbid_reaction_condition_description_string = "Rules/&ConditionMonkSubclassWayOfTheOpenHandForbidReactionPowerDescription";
 
-            CharacterSubclassDefinition definition = new CharacterSubclassDefinitionBuilder("MonkSubclassPrimalPathOfFrozenFury", "8039f501-1be5-47e8-9777-82129a24f46d")
-                    .SetGuiPresentation(gui_presentation)
-                    .AddFeatureAtLevel(frozen_fury, 3)
-                    .AddFeatureAtLevel(frigid_body, 6)
-                    .AddFeatureAtLevel(numb, 10)
-                    .AddToDB();
-
-            frozen_fury_rage_feature.requiredSubclass = definition;
-            return definition;
-        }
-
-
-        static void createNumb()
-        {
-            string numb_title_string = "Feature/&MonkSubclassFrozenFuryNumbTitle";
-            string numb_description_string = "Feature/&MonkSubclassFrozenFuryNumbDescription";
-
-            var conditons = new List<ConditionDefinition> { DatabaseHelper.ConditionDefinitions.ConditionPoisoned, DatabaseHelper.ConditionDefinitions.ConditionFrightened };
-            var numb_immunity = Helpers.FeatureBuilder<NewFeatureDefinitions.ImmunityToCondtionIfHasSpecificConditions>.createFeature("MonkSubclassFrozenFuryNumbImmunity",
-                                                                                                                          "",
-                                                                                                                          numb_title_string,
-                                                                                                                          numb_description_string,
-                                                                                                                          null,
-                                                                                                                          f =>
-                                                                                                                          {
-                                                                                                                              f.immuneCondtions = conditons;
-                                                                                                                              f.requiredConditions = new List<ConditionDefinition>();
-                                                                                                                          }
-                                                                                                                          );
-
-            var numb_removal = Helpers.FeatureBuilder<NewFeatureDefinitions.RemoveConditionsOnConditionApplication>.createFeature("MonkSubclassFrozenFuryNumbRemoval",
-                                                                                                              "",
-                                                                                                              numb_title_string,
-                                                                                                              numb_description_string,
-                                                                                                              null,
-                                                                                                              f =>
-                                                                                                              {
-                                                                                                                  f.removeConditions = conditons;
-                                                                                                                  f.appliedConditions = new List<ConditionDefinition>();
-                                                                                                              }
-                                                                                                              );
-
-            foreach (var rp in rage_powers)
-            {
-                numb_immunity.requiredConditions.Add(rp.Value.EffectDescription.EffectForms[0].ConditionForm.ConditionDefinition);
-                numb_removal.appliedConditions.Add(rp.Value.EffectDescription.EffectForms[0].ConditionForm.ConditionDefinition);
-            }
-
-
-            numb = Helpers.FeatureSetBuilder.createFeatureSet("MonkSubclassFrozenFuryNumb",
-                                                              "",
-                                                              numb_title_string,
-                                                              numb_description_string,
-                                                              false,
-                                                              FeatureDefinitionFeatureSet.FeatureSetMode.Union,
-                                                              false,
-                                                              numb_immunity,
-                                                              numb_removal
-                                                              );
-        }
-
-
-        static void createFrigidBody()
-        {
-            string frigid_body_title_string = "Feature/&MonkSubclassFrozenFuryFrigidBodyTitle";
-            string frigid_body_description_string = "Feature/&MonkSubclassFrozenFuryFrigidBodyDescription";
-
-            frigid_body = Helpers.FeatureBuilder<NewFeatureDefinitions.ArmorBonusAgainstAttackType>.createFeature("MonkSubclassFrozenFuryFrigidBody",
-                                                                                                                  "",
-                                                                                                                  frigid_body_title_string,
-                                                                                                                  frigid_body_description_string,
-                                                                                                                  null,
-                                                                                                                  f =>
-                                                                                                                  {
-                                                                                                                      f.applyToMelee = false;
-                                                                                                                      f.applyToRanged = true;
-                                                                                                                      f.requiredConditions = new List<ConditionDefinition>();
-                                                                                                                      f.value = 2;
-                                                                                                                  }
-                                                                                                                  );
-            foreach (var rp in rage_powers)
-            {
-                frigid_body.requiredConditions.Add(rp.Value.EffectDescription.EffectForms[0].ConditionForm.ConditionDefinition);
-            }
-                                                                
-        }
-
-
-        static void createWintersFury()
-        {
-            string winters_fury_title_string = "Feature/&MonkSubclassFrozenFuryWintersFuryTitle";
-            string winters_fury_description_string = "Feature/&MonkSubclassFrozenFuryWintersFuryDescription";
-
-            List<(int level, int dice_number, RuleDefinitions.DieType die_type)> frozen_fury_damages = new List<(int level, int dice_number, RuleDefinitions.DieType die_type)>
-            {
-                {(5, 1, RuleDefinitions.DieType.D6) },
-                {(9, 1, RuleDefinitions.DieType.D10) },
-                {(13, 2, RuleDefinitions.DieType.D6) },
-                {(20, 2, RuleDefinitions.DieType.D10) }
-            };
-
-            List<(int, FeatureDefinitionPower)> power_list = new List<(int, FeatureDefinitionPower)>();
-            foreach (var entry in frozen_fury_damages)
-            {
-                var damage = new DamageForm();
-                damage.DiceNumber = entry.dice_number;
-                damage.DieType = entry.die_type;
-                damage.VersatileDieType = entry.die_type;
-                damage.DamageType = Helpers.DamageTypes.Cold;
-
-                var effect = new EffectDescription();
-                effect.Copy(DatabaseHelper.SpellDefinitions.FireShieldCold.EffectDescription);
-                effect.SetRangeType(RuleDefinitions.RangeType.Self);
-                effect.SetTargetType(RuleDefinitions.TargetType.Sphere);
-                effect.SetTargetSide(RuleDefinitions.Side.All);
-                effect.SetTargetParameter(2);
-                effect.SetTargetParameter2(1);
-                effect.SetRangeParameter(1);
-                effect.SetCanBePlacedOnCharacter(true);
-                effect.DurationType = RuleDefinitions.DurationType.Instantaneous;
-                effect.DurationParameter = 0;
-                effect.SetEffectParticleParameters(DatabaseHelper.FeatureDefinitionPowers.PowerDomainElementalHeraldOfTheElementsCold.EffectDescription.EffectParticleParameters);
-                effect.SetTargetExcludeCaster(true);
-
-                effect.EffectForms.Clear();
-                var effect_form = new EffectForm();
-                effect_form.DamageForm = damage;
-                effect_form.FormType = EffectForm.EffectFormType.Damage;
-                effect.EffectForms.Add(effect_form);
-
-
-                var power = Helpers.PowerBuilder.createPower("MonkSubclassFrozenFuryWintersFuryPower" + entry.level,
-                                                         "",
-                                                         winters_fury_title_string,
-                                                         winters_fury_description_string,
-                                                         null,
-                                                         DatabaseHelper.FeatureDefinitionPowers.PowerDomainElementalHeraldOfTheElementsCold,
-                                                         effect,
-                                                         RuleDefinitions.ActivationTime.NoCost,
-                                                         1,
-                                                         RuleDefinitions.UsesDetermination.Fixed,
-                                                         RuleDefinitions.RechargeRate.AtWill,
-                                                         show_casting: false);
-                power_list.Add((entry.level, power));
-            }
-
-            frozen_fury_rage_feature = Helpers.FeatureBuilder<NewFeatureDefinitions.ApplyPowerOnTurnEndBasedOnClassLevel>.createFeature("MonkSubclassFrozenFuryWintersFuryRageFeature",
-                                                                                                                                          "",
-                                                                                                                                          winters_fury_title_string,
-                                                                                                                                          winters_fury_description_string,
-                                                                                                                                          null,
-                                                                                                                                          f =>
-                                                                                                                                          {
-                                                                                                                                              f.characterClass = monk_class;
-                                                                                                                                              f.powerLevelList = power_list;
-                                                                                                                                              //will fill subclass in FrozenFuryPath creation
-                                                                                                                                          }
-                                                                                                                                          );
-
-            foreach (var rp in rage_powers)
-            {
-                var rage_conditon = rp.Value.EffectDescription.EffectForms[0].conditionForm.conditionDefinition;
-                rage_conditon.Features.Add(frozen_fury_rage_feature);
-            }
-
-            frozen_fury = Helpers.OnlyDescriptionFeatureBuilder.createOnlyDescriptionFeature("MonkSubclassFrozenFuryWintersFuryFeature",
-                                                                                             "",
-                                                                                             winters_fury_title_string,
-                                                                                             winters_fury_description_string
-                                                                                             );
-
-        }
-
-        static void createWarShamanSpellcasting()
-        {
-            war_shaman_spelllist = Helpers.SpelllistBuilder.create9LevelSpelllist("MonkSubclassWarshamanSpelllist", "", "",
-                                                                    new List<SpellDefinition>
-                                                                    {
-                                                                                    DatabaseHelper.SpellDefinitions.AnnoyingBee,
-                                                                                    DatabaseHelper.SpellDefinitions.Guidance,
-                                                                                    DatabaseHelper.SpellDefinitions.PoisonSpray,
-                                                                                    DatabaseHelper.SpellDefinitions.Resistance,
-                                                                    },
-                                                                    new List<SpellDefinition>
-                                                                    {
-                                                                                    DatabaseHelper.SpellDefinitions.AnimalFriendship,
-                                                                                    DatabaseHelper.SpellDefinitions.CharmPerson,
-                                                                                    DatabaseHelper.SpellDefinitions.CureWounds,
-                                                                                    DatabaseHelper.SpellDefinitions.DetectMagic,
-                                                                                    DatabaseHelper.SpellDefinitions.FaerieFire,
-                                                                                    DatabaseHelper.SpellDefinitions.FogCloud,
-                                                                                    DatabaseHelper.SpellDefinitions.Goodberry,
-                                                                                    DatabaseHelper.SpellDefinitions.HealingWord,
-                                                                                    DatabaseHelper.SpellDefinitions.Jump,
-                                                                                    DatabaseHelper.SpellDefinitions.Longstrider,
-                                                                                    DatabaseHelper.SpellDefinitions.Thunderwave
-                                                                    },
-                                                                    new List<SpellDefinition>
-                                                                    {
-                                                                                    DatabaseHelper.SpellDefinitions.Barkskin,
-                                                                                    DatabaseHelper.SpellDefinitions.Darkvision,
-                                                                                    DatabaseHelper.SpellDefinitions.EnhanceAbility,
-                                                                                    DatabaseHelper.SpellDefinitions.FindTraps,
-                                                                                    //DatabaseHelper.SpellDefinitions.FlameBlade,
-                                                                                    DatabaseHelper.SpellDefinitions.FlamingSphere,
-                                                                                    DatabaseHelper.SpellDefinitions.GustOfWind,
-                                                                                    DatabaseHelper.SpellDefinitions.HoldPerson,
-                                                                                    DatabaseHelper.SpellDefinitions.LesserRestoration,
-                                                                                    DatabaseHelper.SpellDefinitions.PassWithoutTrace,
-                                                                                    DatabaseHelper.SpellDefinitions.ProtectionFromPoison
-                                                                    },
-                                                                    new List<SpellDefinition>
-                                                                    {
-                                                                                    DatabaseHelper.SpellDefinitions.ConjureAnimals,
-                                                                                    DatabaseHelper.SpellDefinitions.Daylight,
-                                                                                    DatabaseHelper.SpellDefinitions.DispelMagic,
-                                                                                    DatabaseHelper.SpellDefinitions.ProtectionFromEnergy,
-                                                                                    DatabaseHelper.SpellDefinitions.SleetStorm,
-                                                                                    DatabaseHelper.SpellDefinitions.WindWall
-                                                                    },
-                                                                    new List<SpellDefinition>
-                                                                    {
-                                                                                    DatabaseHelper.SpellDefinitions.Blight,
-                                                                                    DatabaseHelper.SpellDefinitions.Confusion,
-                                                                                    DatabaseHelper.SpellDefinitions.FreedomOfMovement,
-                                                                                    DatabaseHelper.SpellDefinitions.GiantInsect,
-                                                                                    DatabaseHelper.SpellDefinitions.IceStorm,
-                                                                                    DatabaseHelper.SpellDefinitions.Stoneskin,
-                                                                                    DatabaseHelper.SpellDefinitions.WallOfFire
-                                                                    }
+            var condition = Helpers.ConditionBuilder.createCondition("MonkSubclassWayOfTheOpenHandForbidReactionCondition",
+                                                                    "",
+                                                                    open_hand_forbid_reaction_condition_title_string,
+                                                                    open_hand_forbid_reaction_condition_description_string,
+                                                                    null,
+                                                                    DatabaseHelper.ConditionDefinitions.ConditionDazzled,
+                                                                    DatabaseHelper.FeatureDefinitionActionAffinitys.ActionAffinityConditionDazzled
                                                                     );
-            war_shaman_spelllist.SetMaxSpellLevel(4);
-            war_shaman_spelllist.SetHasCantrips(true);
-
-            war_shaman_spellcasting = Helpers.SpellcastingBuilder.createSpontaneousSpellcasting("MonkSubclassWarshamanSpellcasting",
-                                                                                              "",
-                                                                                              "Feature/&MonkSubclassWarShamanClassSpellcastingTitle",
-                                                                                              "Feature/&MonkSubclassWarShamanClassSpellcastingDescription",
-                                                                                              war_shaman_spelllist,
-                                                                                              Helpers.Stats.Wisdom,
-                                                                                              new List<int> {0, 0, 2, 2, 2, 2, 2, 2, 2, 2,
-                                                                                                             3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-                                                                                              new List<int> { 0,  0,  3,  4,  4,  4,  5,  6,  6,  7,
-                                                                                                              8,  8,  9, 10, 10, 11, 11, 11, 12, 13},
-                                                                                              Helpers.Misc.createSpellSlotsByLevel(new List<int> { 0, 0, 0, 0 }, 
-                                                                                                                                   new List<int> { 0, 0, 0, 0 },
-                                                                                                                                   new List<int> { 2, 0, 0, 0 },//3
-                                                                                                                                   new List<int> { 3, 0, 0, 0 },//4
-                                                                                                                                   new List<int> { 3, 0, 0, 0 },//5
-                                                                                                                                   new List<int> { 3, 0, 0, 0 },//6
-                                                                                                                                   new List<int> { 4, 2, 0, 0 },//7
-                                                                                                                                   new List<int> { 4, 2, 0, 0 },//8
-                                                                                                                                   new List<int> { 4, 2, 0, 0 },//9
-                                                                                                                                   new List<int> { 4, 3, 0, 0 },//10
-                                                                                                                                   new List<int> { 4, 3, 0, 0 },//11
-                                                                                                                                   new List<int> { 4, 3, 0, 0 },//12
-                                                                                                                                   new List<int> { 4, 3, 2, 0 },//13
-                                                                                                                                   new List<int> { 4, 3, 2, 0 },//14
-                                                                                                                                   new List<int> { 4, 3, 2, 0 },//15
-                                                                                                                                   new List<int> { 4, 3, 3, 0 },//16
-                                                                                                                                   new List<int> { 4, 3, 3, 0 },//17
-                                                                                                                                   new List<int> { 4, 3, 3, 0 },//18
-                                                                                                                                   new List<int> { 4, 3, 3, 1 },//19
-                                                                                                                                   new List<int> { 4, 3, 3, 1 }//20
-                                                                                                                                   )
-                                                                                              );
-            war_shaman_spellcasting.SetSpellCastingLevel(-1);
-            war_shaman_spellcasting.SetSpellCastingOrigin(FeatureDefinitionCastSpell.CastingOrigin.Subclass);
-        }
-
-
-        static void createRagecaster()
-        {
-            string ragecaster_title_string = "Feature/&MonkSubclassWarShamanClassRagecasterTitle";
-            string ragecaster_description_string = "Feature/&MonkSubclassWarShamanClassRagecasterDescription";
-
-            ragecaster = Helpers.OnlyDescriptionFeatureBuilder.createOnlyDescriptionFeature("MonkSubclassWarshamanRagecaster",
-                                                                                            "",
-                                                                                            ragecaster_title_string,
-                                                                                            ragecaster_description_string
-                                                                                            );
-            rage_spellcasting_forbiden.exceptionFeatures.Add(ragecaster);
-        }
-
-
-        static void createShareRage()
-        {
-            string share_rage_title_string = "Feature/&MonkSubclassWarShamanClassShareRageTitle";
-            string share_rage_description_string = "Feature/&MonkSubclassWarShamanClassShareRageDescription";
-
-            NewFeatureDefinitions.PowerWithRestrictions previous_power = null;
-
-            foreach (var kv in rage_bonus_damage_level_map)
-            {
-                var power = Helpers.CopyFeatureBuilder<NewFeatureDefinitions.PowerWithRestrictions>.createFeatureCopy("MonkSubclassWarshamanShareRagePower" + kv.Value.ToString(),
-                                                                                                                      "",
-                                                                                                                      Helpers.StringProcessing.appendToString(share_rage_title_string,
-                                                                                                                                                              share_rage_title_string + kv.Value.ToString(),
-                                                                                                                                                              $" (+{kv.Key})"),
-                                                                                                                      share_rage_description_string,
-                                                                                                                      DatabaseHelper.FeatureDefinitionPowers.PowerDomainLawHolyRetribution.GuiPresentation.SpriteReference,
-                                                                                                                      rage_powers[kv.Value]
-                                                                                                                      );
-                var effect = new EffectDescription();
-                effect.Copy(DatabaseHelper.FeatureDefinitionPowers.PowerDomainBattleHeraldOfBattle.EffectDescription);
-                effect.SetRangeType(RuleDefinitions.RangeType.Distance);
-                effect.SetRangeParameter(6);
-                effect.SetTargetParameter(1);
-                effect.SetTargetParameter2(1);
-                effect.DurationParameter = 1;
-                effect.DurationType = RuleDefinitions.DurationType.Minute;
-                effect.EffectForms.Clear();
-                effect.SetTargetType(RuleDefinitions.TargetType.Individuals);
-                effect.SetTargetSide(RuleDefinitions.Side.Ally);
-                effect.SetTargetFilteringTag((RuleDefinitions.TargetFilteringTag)(ExtendedEnums.ExtraTargetFilteringTag.NonCaster | ExtendedEnums.ExtraTargetFilteringTag.NoHeavyArmor));
-
-                effect.EffectForms.Add(rage_powers[kv.Value].EffectDescription.EffectForms[0]);
-                var effect_form = new EffectForm();
-                effect_form.ConditionForm = new ConditionForm();
-                effect_form.FormType = EffectForm.EffectFormType.Condition;
-                effect_form.ConditionForm.Operation = ConditionForm.ConditionOperation.Add;
-                effect_form.ConditionForm.ConditionDefinition = rage_powers[kv.Value].EffectDescription.EffectForms[0].conditionForm.conditionDefinition;
-                effect_form.conditionForm.SetApplyToSelf(true);
-                effect.EffectForms.Add(effect_form);
-
-                power.SetEffectDescription(effect);
-                power.SetRechargeRate(RuleDefinitions.RechargeRate.SpellSlot);
-                power.SetSpellcastingFeature(war_shaman_spellcasting);
-                power.SetFixedUsesPerRecharge(10);
-
-                if (previous_power != null)
-                {
-                    power.SetOverriddenPower(previous_power);
-                }
-                previous_power = power;
-                power.SetShortTitleOverride(share_rage_title_string);
-                power.linkedPower = rage_powers[kv.Value];
-
-                share_rage_powers.Add(kv.Value, power);
-            }
-        }
-
-
-        static CharacterSubclassDefinition createPathOfWarShaman()
-        {
-            createWarShamanSpellcasting();
-            createShareRage();
-            createRagecaster();
-
-            var gui_presentation = new GuiPresentationBuilder(
-                    "Subclass/&MonkSubclassPrimalPathOfWarShamanDescription",
-                    "Subclass/&MonkSubclassPrimalPathOfWarShamanTitle")
-                    .SetSpriteReference(DatabaseHelper.CharacterSubclassDefinitions.TraditionGreenmage.GuiPresentation.SpriteReference)
-                    .Build();
-
-            CharacterSubclassDefinition definition = new CharacterSubclassDefinitionBuilder("MonkSubclassPrimalPathOfWarShaman", "4c9bf92d-873f-43e6-aa47-b4e5838c31d6")
-                    .SetGuiPresentation(gui_presentation)
-                    .AddFeatureAtLevel(war_shaman_spellcasting, 3)
-                    .AddFeatureAtLevel(share_rage_powers[1], 6)
-                    .AddFeatureAtLevel(share_rage_powers[9], 9)
-                    .AddFeatureAtLevel(ragecaster, 10)
-                    .AddFeatureAtLevel(share_rage_powers[16], 16)
-                    .AddToDB();
-
-            return definition;
-        }
-
-
-        static void createFrenzy()
-        {
-            string frenzy_exhausted_title_string = "Feature/&MonkSubclassBerserkerFrenzyExhaustedTitle";
-            string frenzy_exhausted_description_string = "Feature/&MonkSubclassBerserkerFrenzyExhaustedDescription";
-            string frenzy_condition_title_string = "Rules/&MonkSubclassBerserkerFrenzyCondition";
-
-
-            exhausted_after_frenzy_condition = Helpers.ConditionBuilder.createConditionWithInterruptions("MonkSubclassBerserkerFrenzyExhasutedCondition",
-                                                                                      "",
-                                                                                      frenzy_exhausted_title_string,
-                                                                                      frenzy_exhausted_description_string,
-                                                                                      null,
-                                                                                      DatabaseHelper.ConditionDefinitions.ConditionExhausted,
-                                                                                      new RuleDefinitions.ConditionInterruption[] { RuleDefinitions.ConditionInterruption.AnyBattleTurnEnd },
-                                                                                      DatabaseHelper.FeatureDefinitionAbilityCheckAffinitys.AbilityCheckAffinityBestowCurseStrength,
-                                                                                      DatabaseHelper.FeatureDefinitionAbilityCheckAffinitys.AbilityCheckAffinityBestowCurseDexterity,
-                                                                                      DatabaseHelper.FeatureDefinitionAbilityCheckAffinitys.AbilityCheckAffinityBestowCurseConstitution,
-                                                                                      DatabaseHelper.FeatureDefinitionAbilityCheckAffinitys.AbilityCheckAffinityBestowCurseIntelligence,
-                                                                                      DatabaseHelper.FeatureDefinitionAbilityCheckAffinitys.AbilityCheckAffinityBestowCurseWisdom,
-                                                                                      DatabaseHelper.FeatureDefinitionAbilityCheckAffinitys.AbilityCheckAffinityBestowCurseCharisma
-                                                                                      );
-            exhausted_after_frenzy_condition.SetConditionType(RuleDefinitions.ConditionType.Detrimental);
-
-            string frenzy_title_string = "Feature/&MonkSubclassBerserkerFrenzyTitle";
-            string frenzy_description_string = "Feature/&MonkSubclassBerserkerFrenzyDescription";
-            var feature_attack = Helpers.CopyFeatureBuilder<FeatureDefinitionAttributeModifier>.createFeatureCopy("MonkSubclassBerserkerFrenzyExtraAttack",
-                                                                                                           "",
-                                                                                                           "",
-                                                                                                           "",
-                                                                                                           null,
-                                                                                                           DatabaseHelper.FeatureDefinitionAttributeModifiers.AttributeModifierFighterExtraAttack
-                                                                                                           );
-            var feature_no_bonus_attack = Helpers.CopyFeatureBuilder<FeatureDefinitionActionAffinity>.createFeatureCopy("MonkSubclassBerserkerNoBonusAction",
-                                                                                                                           "",
-                                                                                                                           "",
-                                                                                                                           "",
-                                                                                                                           null,
-                                                                                                                           DatabaseHelper.FeatureDefinitionActionAffinitys.ActionAffinityConditionRestrained,
-                                                                                                                           a =>
-                                                                                                                           {
-                                                                                                                               a.allowedActionTypes = new bool[]
-                                                                                                                               {
-                                                                                                                                   true, false, true, true, true, true
-                                                                                                                               };
-                                                                                                                           }
-                                                                                                                           );
-
-            var condition = Helpers.ConditionBuilder.createConditionWithInterruptions("MonkSubclassBerserkerFrenzyCondition",
-                                                                          "",
-                                                                          frenzy_condition_title_string,
-                                                                          frenzy_description_string,
-                                                                          null,
-                                                                          DatabaseHelper.ConditionDefinitions.ConditionHeraldOfBattle,
-                                                                          new RuleDefinitions.ConditionInterruption[] {},
-                                                                          feature_attack,
-                                                                          feature_no_bonus_attack
-                                                                          );
-
-            var frenzy_watcher = Helpers.FeatureBuilder<NewFeatureDefinitions.FrenzyWatcher>.createFeature("MonkSubclassBerserkerFrenzyWatcher",
-                                                                               "",
-                                                                               Common.common_no_title,
-                                                                               Common.common_no_title,
-                                                                               null,
-                                                                               r =>
-                                                                               {
-                                                                                   r.requiredConditions = rage_powers.Select(kv => kv.Value.EffectDescription.EffectForms[0].conditionForm.conditionDefinition).ToList();
-                                                                                   r.targetCondition = condition;
-                                                                                   r.afterCondition = exhausted_after_frenzy_condition;
-                                                                               }
-                                                                               );
-
-            condition.Features.Add(frenzy_watcher);
 
             var effect = new EffectDescription();
-            effect.Copy(DatabaseHelper.SpellDefinitions.Haste.EffectDescription);
-            effect.SetRangeType(RuleDefinitions.RangeType.Self);
-            effect.SetRangeParameter(1);
+            effect.Copy(DatabaseHelper.FeatureDefinitionPowers.PowerDomainBattleDecisiveStrike.EffectDescription);
             effect.DurationParameter = 1;
-            effect.DurationType = RuleDefinitions.DurationType.UntilLongRest;
+            effect.DurationType = RuleDefinitions.DurationType.Round;
+            effect.SetSavingThrowDifficultyAbility(Helpers.Stats.Wisdom);
+            effect.SavingThrowAbility = Helpers.Stats.Strength;
+            effect.hasSavingThrow = false;
             effect.EffectForms.Clear();
-            effect.SetTargetType(RuleDefinitions.TargetType.Self);
 
             var effect_form = new EffectForm();
             effect_form.ConditionForm = new ConditionForm();
@@ -1231,190 +719,144 @@ namespace SolastaMonkClass
             effect_form.ConditionForm.ConditionDefinition = condition;
             effect.EffectForms.Add(effect_form);
 
-            frenzy = Helpers.GenericPowerBuilder<NewFeatureDefinitions.PowerWithRestrictions>
-                                                      .createPower("MonkSubclassBerserkerFrenzyPower",
-                                                         "",
-                                                         frenzy_title_string,
-                                                         frenzy_description_string,
-                                                         DatabaseHelper.FeatureDefinitionPowers.PowerOathOfTirmarSmiteTheHidden.GuiPresentation.SpriteReference,
-                                                         effect,
-                                                         RuleDefinitions.ActivationTime.BonusAction,
-                                                         1,
-                                                         RuleDefinitions.UsesDetermination.Fixed,
-                                                         RuleDefinitions.RechargeRate.LongRest
-                                                         );
-            frenzy.restrictions = new List<NewFeatureDefinitions.IRestriction>()
-            {
-                new NewFeatureDefinitions.InBattleRestriction(),
-                new NewFeatureDefinitions.NoConditionRestriction(exhausted_after_frenzy_condition),
-                new NewFeatureDefinitions.HasAtLeastOneConditionFromListRestriction(rage_powers.Select(kv => kv.Value.EffectDescription.EffectForms[0].conditionForm.conditionDefinition).ToArray())
-            };
+            var power = Helpers.GenericPowerBuilder<NewFeatureDefinitions.PowerWithRestrictions>
+                                                        .createPower("MonkSubclassWayOfTheOpenHandForbidReaction",
+                                                                     "",
+                                                                     open_hand_forbid_reaction_title_string,
+                                                                     open_hand_forbid_reaction_description_string,
+                                                                     flurry_of_blows.GuiPresentation.SpriteReference,
+                                                                     effect,
+                                                                     RuleDefinitions.ActivationTime.OnAttackHit,
+                                                                     2,
+                                                                     RuleDefinitions.UsesDetermination.Fixed,
+                                                                     RuleDefinitions.RechargeRate.AtWill
+                                                                     );
+            power.restrictions = new List<NewFeatureDefinitions.IRestriction>()
+                                            {
+                                                new NewFeatureDefinitions.HasAtLeastOneConditionFromListRestriction(flurry_of_blows_condition)
+                                            };
+            power.checkReaction = true;
 
-            frenzy.SetShortTitleOverride(frenzy_title_string);
+            open_hand_technique_forbid_reaction = power;
+            ki.powers.Add(open_hand_technique_forbid_reaction);
+
+            Helpers.StringProcessing.addPowerReactStrings(open_hand_technique_forbid_reaction, open_hand_forbid_reaction_title_string, use_open_hand_forbid_reaction_react_description,
+                                                                    use_open_hand_forbid_reaction_react_title, use_open_hand_forbid_reaction_react_description, "SpendPower");
         }
 
 
-        static void createMindlessRage()
+        static void createOpenHandTechniquePush()
         {
-            string mindless_rage_title_string = "Feature/&MonkSubclassMindlessRageTitle";
-            string mindless_rage_description_string = "Feature/&MonkSubclassMindlessRageDescription";
+            string open_hand_push_title_string = "Feature/&MonkSubclassWayOfTheOpenHandPushTitle";
+            string open_hand_push_description_string = "Feature/&MonkSubclassWayOfTheOpenHandPushDescription";
+            string use_open_hand_push_react_description = "Reaction/&SpendMonkSubclassWayOfTheOpenHandPushPowerReactDescription";
+            string use_open_hand_push_react_title = "Reaction/&CommonUsePowerReactTitle";
 
-            var conditons = new List<ConditionDefinition> { DatabaseHelper.ConditionDefinitions.ConditionCharmed, DatabaseHelper.ConditionDefinitions.ConditionFrightened };
-            var immunity = Helpers.FeatureBuilder<NewFeatureDefinitions.ImmunityToCondtionIfHasSpecificConditions>.createFeature("MonkSubclassBerserkerMindlessRageImmunity",
-                                                                                                                                    "",
-                                                                                                                                    mindless_rage_title_string,
-                                                                                                                                    mindless_rage_description_string,
-                                                                                                                                    null,
-                                                                                                                                    f =>
-                                                                                                                                    {
-                                                                                                                                        f.immuneCondtions = conditons;
-                                                                                                                                        f.requiredConditions = new List<ConditionDefinition>();
-                                                                                                                                    }
-                                                                                                                                    );
+            var effect = new EffectDescription();
+            effect.Copy(DatabaseHelper.FeatureDefinitionPowers.PowerDomainBattleDecisiveStrike.EffectDescription);
+            effect.DurationParameter = 1;
+            effect.DurationType = RuleDefinitions.DurationType.Instantaneous;
+            effect.SetSavingThrowDifficultyAbility(Helpers.Stats.Wisdom);
+            effect.SavingThrowAbility = Helpers.Stats.Strength;
+            effect.hasSavingThrow = true;
+            effect.SetDifficultyClassComputation(RuleDefinitions.EffectDifficultyClassComputation.AbilityScoreAndProficiency);
+            effect.EffectForms.Clear();
 
-            var removal = Helpers.FeatureBuilder<NewFeatureDefinitions.RemoveConditionsOnConditionApplication>.createFeature("MonkSubclassBerserkerMindlessRageRemoval",
-                                                                                                                              "",
-                                                                                                                              mindless_rage_title_string,
-                                                                                                                              mindless_rage_description_string,
-                                                                                                                              null,
-                                                                                                                              f =>
-                                                                                                                              {
-                                                                                                                                  f.removeConditions = conditons;
-                                                                                                                                  f.appliedConditions = new List<ConditionDefinition>();
-                                                                                                                              }
-                                                                                                                              );
+            var effect_form = new EffectForm();
+            effect_form.motionForm = new MotionForm();
+            effect_form.FormType = EffectForm.EffectFormType.Motion;
+            effect_form.motionForm.type = MotionForm.MotionType.PushFromOrigin;
+            effect_form.motionForm.distance = 3;
+            effect.EffectForms.Add(effect_form);
 
-            foreach (var rp in rage_powers)
-            {
-                immunity.requiredConditions.Add(rp.Value.EffectDescription.EffectForms[0].ConditionForm.ConditionDefinition);
-                removal.appliedConditions.Add(rp.Value.EffectDescription.EffectForms[0].ConditionForm.ConditionDefinition);
-            }
+            var power = Helpers.GenericPowerBuilder<NewFeatureDefinitions.PowerWithRestrictions>
+                                                        .createPower("MonkSubclassWayOfTheOpenHandPush",
+                                                                     "",
+                                                                     open_hand_push_title_string,
+                                                                     open_hand_push_description_string,
+                                                                     flurry_of_blows.GuiPresentation.SpriteReference,
+                                                                     effect,
+                                                                     RuleDefinitions.ActivationTime.OnAttackHit,
+                                                                     2,
+                                                                     RuleDefinitions.UsesDetermination.Fixed,
+                                                                     RuleDefinitions.RechargeRate.AtWill
+                                                                     );
+            power.restrictions = new List<NewFeatureDefinitions.IRestriction>()
+                                            {
+                                                new NewFeatureDefinitions.HasAtLeastOneConditionFromListRestriction(flurry_of_blows_condition)
+                                            };
+            power.checkReaction = true;
 
+            open_hand_technique_push = power;
 
-            mindless_rage = Helpers.FeatureSetBuilder.createFeatureSet("MonkSubclassBerserkerMindlessRage",
-                                                                          "",
-                                                                          mindless_rage_title_string,
-                                                                          mindless_rage_description_string,
-                                                                          false,
-                                                                          FeatureDefinitionFeatureSet.FeatureSetMode.Union,
-                                                                          false,
-                                                                          immunity,
-                                                                          removal
-                                                                          );
+            ki.powers.Add(open_hand_technique_push);
+            Helpers.StringProcessing.addPowerReactStrings(open_hand_technique_push, open_hand_push_title_string, use_open_hand_push_react_description,
+                                                        use_open_hand_push_react_title, use_open_hand_push_react_description, "SpendPower");
         }
 
 
-        static void createIntimidatingPresence()
+        static void createOpenHandTechniqueKnock()
         {
-            string intimidating_presence_title_string = "Feature/&MonkSubclassBerserkerIntimidatingPresenceTitle";
-            string intimidating_presence_description_string = "Feature/&MonkSubclassBerserkerIntimidatingPresenceDescription";
+            string open_hand_knock_title_string = "Feature/&MonkSubclassWayOfTheOpenHandKnockTitle";
+            string open_hand_knock_description_string = "Feature/&MonkSubclassWayOfTheOpenHandKnockDescription";
+            string use_open_hand_knock_react_description = "Reaction/&SpendMonkSubclassWayOfTheOpenHandKnockPowerReactDescription";
+            string use_open_hand_knock_react_title = "Reaction/&CommonUsePowerReactTitle";
 
-            var immune_condition = Helpers.CopyFeatureBuilder<ConditionDefinition>.createFeatureCopy("MonkSubclassBerserkerIntimidatingPresenceImmunityCondition",
-                                                                                                     "",
-                                                                                                     Common.common_no_title,
-                                                                                                     Common.common_no_title,
-                                                                                                     Common.common_no_icon,
-                                                                                                     DatabaseHelper.ConditionDefinitions.ConditionTemporaryHitPoints,
-                                                                                                     c =>
-                                                                                                     {
-                                                                                                         c.features = new List<FeatureDefinition>();
-                                                                                                         c.SetConditionType(RuleDefinitions.ConditionType.Neutral);
-                                                                                                         c.SetSpecialDuration(true);
-                                                                                                         c.SetDurationType(RuleDefinitions.DurationType.UntilLongRest);
-                                                                                                         c.SetDurationParameterDie(RuleDefinitions.DieType.D1);
-                                                                                                     }
-                                                                                                     );
-            immune_condition.SetSilentWhenAdded(true);
-            immune_condition.SetSilentWhenRemoved(true);
+            var effect = new EffectDescription();
+            effect.Copy(DatabaseHelper.FeatureDefinitionPowers.PowerDomainBattleDecisiveStrike.EffectDescription);
+            effect.DurationParameter = 1;
+            effect.DurationType = RuleDefinitions.DurationType.Instantaneous;
+            effect.SetSavingThrowDifficultyAbility(Helpers.Stats.Wisdom);
+            effect.SavingThrowAbility = Helpers.Stats.Dexterity;
+            effect.SetDifficultyClassComputation(RuleDefinitions.EffectDifficultyClassComputation.AbilityScoreAndProficiency);
+            effect.EffectForms.Clear();
 
+            var effect_form = new EffectForm();
+            effect_form.motionForm = new MotionForm();
+            effect_form.FormType = EffectForm.EffectFormType.Motion;
+            effect_form.motionForm.type = MotionForm.MotionType.FallProne;
+            effect_form.motionForm.distance = 3;
+            effect.EffectForms.Add(effect_form);
 
-            //Add to our new effect
-            EffectDescription effect_description = new EffectDescription();
-            effect_description.Copy(DatabaseHelper.FeatureDefinitionPowers.PowerDomainOblivionMarkOfFate.EffectDescription);
-            effect_description.SetSavingThrowDifficultyAbility(Helpers.Stats.Charisma);
-            effect_description.SetDifficultyClassComputation(RuleDefinitions.EffectDifficultyClassComputation.AbilityScoreAndProficiency);
-            effect_description.SavingThrowAbility = Helpers.Stats.Wisdom;
-            effect_description.HasSavingThrow = true;
-            effect_description.DurationType = RuleDefinitions.DurationType.Round;
-            effect_description.DurationParameter = 2;
-            effect_description.SetRangeType(RuleDefinitions.RangeType.Distance);
-            effect_description.SetRangeParameter(6);
-            effect_description.SetTargetType(RuleDefinitions.TargetType.Individuals);
-            effect_description.SetTargetSide(RuleDefinitions.Side.Enemy);
-            effect_description.SetEndOfEffect(RuleDefinitions.TurnOccurenceType.EndOfTurn);
-            effect_description.immuneCreatureFamilies = new List<string> {Helpers.Misc.createImmuneIfHasConditionFamily(immune_condition) };
-            
+            var power = Helpers.GenericPowerBuilder<NewFeatureDefinitions.PowerWithRestrictions>
+                                                        .createPower("MonkSubclassWayOfTheOpenHandKnock",
+                                                                     "",
+                                                                     open_hand_knock_title_string,
+                                                                     open_hand_knock_description_string,
+                                                                     flurry_of_blows.GuiPresentation.SpriteReference,
+                                                                     effect,
+                                                                     RuleDefinitions.ActivationTime.OnAttackHit,
+                                                                     2,
+                                                                     RuleDefinitions.UsesDetermination.Fixed,
+                                                                     RuleDefinitions.RechargeRate.AtWill
+                                                                     );
+            power.restrictions = new List<NewFeatureDefinitions.IRestriction>()
+                                            {
+                                                new NewFeatureDefinitions.HasAtLeastOneConditionFromListRestriction(flurry_of_blows_condition)
+                                            };
+            power.checkReaction = true;
 
-            effect_description.EffectForms.Clear();
-            EffectForm effect_form = new EffectForm();
-            effect_form.FormType = EffectForm.EffectFormType.Condition;
-            effect_form.ConditionForm = new ConditionForm();
-            effect_form.ConditionForm.ConditionDefinition = DatabaseHelper.ConditionDefinitions.ConditionFrightened;
-            effect_form.hasSavingThrow = true;
-            effect_form.SavingThrowAffinity = RuleDefinitions.EffectSavingThrowType.Negates;
-            effect_form.conditionForm.operation = ConditionForm.ConditionOperation.Add;
-            effect_description.EffectForms.Add(effect_form);
+            open_hand_technique_knock = power;
 
-            intimidating_presence = Helpers.GenericPowerBuilder<FeatureDefinitionPower>
-                                                          .createPower("MonkSubclassBerserkerIntimidatingPresencePower",
-                                                             "",
-                                                             intimidating_presence_title_string,
-                                                             intimidating_presence_description_string,
-                                                             //DatabaseHelper.FeatureDefinitionPowers.PowerDomainOblivionMarkOfFate.GuiPresentation.SpriteReference,
-                                                             DatabaseHelper.SpellDefinitions.Fear.GuiPresentation.SpriteReference,
-                                                             effect_description,
-                                                             RuleDefinitions.ActivationTime.Action,
-                                                             1,
-                                                             RuleDefinitions.UsesDetermination.Fixed,
-                                                             RuleDefinitions.RechargeRate.AtWill
-                                                             );
-            var immune_application = Helpers.FeatureBuilder<NewFeatureDefinitions.ApplyConditionOnPowerUseToTarget>.createFeature("MonkSubclassBerserkerIntimidatingPresenceApplyImmuneFeature",
-                                                                                                                                  "",
-                                                                                                                                  Common.common_no_title,
-                                                                                                                                  Common.common_no_title,
-                                                                                                                                  Common.common_no_icon,
-                                                                                                                                  a =>
-                                                                                                                                  {
-                                                                                                                                      a.condition = immune_condition;
-                                                                                                                                      a.durationType = RuleDefinitions.DurationType.Day;
-                                                                                                                                      a.durationValue = 1;
-                                                                                                                                      a.turnOccurence = RuleDefinitions.TurnOccurenceType.EndOfTurn;
-                                                                                                                                      a.power = intimidating_presence;
-                                                                                                                                      a.onlyOnSucessfulSave = true;
-                                                                                                                                  }
-                                                                                                                                  );
-            intimidating_presence_feature = Helpers.FeatureSetBuilder.createFeatureSet("MonkSubclassBerserkerIntimidatingPresenceFeatureSet",
-                                                                                       "",
-                                                                                       intimidating_presence_title_string,
-                                                                                       intimidating_presence_description_string,
-                                                                                       false,
-                                                                                       FeatureDefinitionFeatureSet.FeatureSetMode.Union,
-                                                                                       false,
-                                                                                       immune_application,
-                                                                                       intimidating_presence
-                                                                                       );
+            ki.powers.Add(open_hand_technique_knock);
+            Helpers.StringProcessing.addPowerReactStrings(open_hand_technique_knock, open_hand_knock_title_string, use_open_hand_knock_react_description,
+                                            use_open_hand_knock_react_title, use_open_hand_knock_react_description, "SpendPower");
         }
 
 
-
-        static CharacterSubclassDefinition createPathOfBerserker()
+        static CharacterSubclassDefinition createWayOfTheOpenHand()
         {
-            createFrenzy();
-            createMindlessRage();
-            createIntimidatingPresence();
-
+            createOpenHandTechnique();
 
             var gui_presentation = new GuiPresentationBuilder(
-                    "Subclass/&MonkSubclassPrimalPathOfBerserkerDescription",
-                    "Subclass/&MonkSubclassPrimalPathOfBerserkerTitle")
-                    .SetSpriteReference(DatabaseHelper.CharacterSubclassDefinitions.RoguishDarkweaver.GuiPresentation.SpriteReference)
+                    "Subclass/&MonkSubclassWayOfTheOpenHandDescription",
+                    "Subclass/&MonkSubclassWayOfTheOpenHandTitle")
+                    .SetSpriteReference(DatabaseHelper.CharacterSubclassDefinitions.DomainLife.GuiPresentation.SpriteReference)
                     .Build();
 
-            CharacterSubclassDefinition definition = new CharacterSubclassDefinitionBuilder("MonkSubclassPrimalPathOfBersrker", "4c6e8abe-1983-49b7-bc3b-2572865f6c17")
+            CharacterSubclassDefinition definition = new CharacterSubclassDefinitionBuilder("MonkSubclassWayOfTheOpenHand", "4c6e8abe-1983-49b7-bc3b-2572865f6c17")
                     .SetGuiPresentation(gui_presentation)
-                    .AddFeatureAtLevel(frenzy, 3)
-                    .AddFeatureAtLevel(mindless_rage, 6)
-                    .AddFeatureAtLevel(intimidating_presence_feature, 10)
+                    .AddFeatureAtLevel(open_hand_technique, 3)
                     .AddToDB();
 
             return definition;
@@ -1430,9 +872,7 @@ namespace SolastaMonkClass
                                           }
                                          );
 
-            MonkFeatureDefinitionSubclassChoice.Subclasses.Add(createPathOfBerserker().Name);
-            MonkFeatureDefinitionSubclassChoice.Subclasses.Add(createPathOfFrozenFury().Name);
-            MonkFeatureDefinitionSubclassChoice.Subclasses.Add(createPathOfWarShaman().Name);
+            MonkFeatureDefinitionSubclassChoice.Subclasses.Add(createWayOfTheOpenHand().Name);
         }
 
         private static FeatureDefinitionSubclassChoice MonkFeatureDefinitionSubclassChoice;

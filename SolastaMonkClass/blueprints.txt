@@ -84,3 +84,14 @@ MonkClassStepOfTheWindCondition	ed9010c5-5586-41dc-a291-1e3f38c6a06d
 MonkClassStepOfTheWindPower	17ab6b68-6f8d-47de-aba6-ce1a0924a551
 MonkClassKi	5516a277-cbf5-4df6-a454-ae85a2c94597
 MonkClassFlurryOfBlowsUnarmedAttack	2ec25805-ae7a-41cd-abbc-bfe80b68b73d
+MonkClassDeflectMissilesActionAffinity	444faadb-67eb-4a32-a697-e13e3e6c5328
+MonkClassDeflectMissiles	1534d380-cc0e-4445-bcd1-b79f0e3d165e
+MonkSubclassWayOfTheOpenHandKnockPower	2359adcc-800c-49a6-a7eb-9451cfa096e9
+MonkSubclassWayOfTheOpenHandPushPower	9965eadd-208b-43cc-a868-36ed675403ac
+MonkSubclassWayOfTheOpenHandForbidReactionCondition	3dd609e2-54d2-4582-ab64-371a4214639d
+MonkSubclassWayOfTheOpenHandForbidReactionPower	47a36424-a9ea-4811-b13f-615529edf097
+MonkSubclassWayOfTheOpenHandTechnique	64b61bfb-c100-442f-96e3-e96cf6c693d8
+MonkSubclassWayOfTheOpenHandKnock	85f9415e-6d11-4f75-94c7-4c3abe7dfe92
+MonkSubclassWayOfTheOpenHandPush	19b878bf-718c-40f9-bb94-57894863f6ff
+MonkSubclassWayOfTheOpenHandForbidReaction	4abd96bd-c3f3-4a9b-8f0b-c413be220e56
+MonkSubclassWayOfTheOpenHandUsedCondition	3b811cb1-e5c0-43a3-a351-3b47b2d435e8
