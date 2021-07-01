@@ -190,15 +190,15 @@ namespace SolastaMonkClass
             string deflect_missiles_title_string = "Feature/&MonkClassDeflectMissilesTitle";
             string deflect_missiles_description_string = "Feature/&MonkClassDeflectMissilesDescription";
 
-            var deflect_missiles_affinity = Helpers.CopyFeatureBuilder<FeatureDefinitionActionAffinity>.createFeatureCopy("MonkClassDeflectMissilesActionAffinity",
+            var deflect_missiles_affinity = Helpers.FeatureBuilder<NewFeatureDefinitions.DeflectMissileCustom>.createFeature("MonkClassDeflectMissilesActionAffinity",
                                                                                                                           "",
-                                                                                                                          "",
-                                                                                                                          "",
+                                                                                                                          deflect_missiles_title_string,
+                                                                                                                          deflect_missiles_description_string,
                                                                                                                           null,
-                                                                                                                          DatabaseHelper.FeatureDefinitionActionAffinitys.ActionAffinityUncannyDodge,
                                                                                                                           a =>
                                                                                                                           {
-                                                                                                                              a.authorizedActions = new List<ActionDefinitions.Id> { ActionDefinitions.Id.DeflectMissile };
+                                                                                                                              a.characterStat = Helpers.Stats.Dexterity;
+                                                                                                                              a.characterClass = monk_class;
                                                                                                                           }
                                                                                                                           );
 
@@ -208,6 +208,7 @@ namespace SolastaMonkClass
                                                                          deflect_missiles_description_string,
                                                                          false,
                                                                          FeatureDefinitionFeatureSet.FeatureSetMode.Union,
+                                                                         false,
                                                                          deflect_missiles_affinity
                                                                          );
         }
