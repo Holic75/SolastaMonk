@@ -1,6 +1,6 @@
 # Monk class for Solasta
 
-This is a mod for the game Solasta: Crown of the Magister. It adds Monk class with 3 primal path subclasses: Berserker, Frozen Fury and  War Shaman.
+This is a mod for the game Solasta: Crown of the Magister. It adds Monk class with 3 subclasses: Way of the Open Hand, ? and  ?.
 It requires SolastaModApi and SolastaModHelpers (https://github.com/Holic75/SolastaModHelpers) mods.
 
 # How to Install
