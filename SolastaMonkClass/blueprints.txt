@@ -95,3 +95,11 @@ MonkSubclassWayOfTheOpenHandKnock	85f9415e-6d11-4f75-94c7-4c3abe7dfe92
 MonkSubclassWayOfTheOpenHandPush	19b878bf-718c-40f9-bb94-57894863f6ff
 MonkSubclassWayOfTheOpenHandForbidReaction	4abd96bd-c3f3-4a9b-8f0b-c413be220e56
 MonkSubclassWayOfTheOpenHandUsedCondition	3b811cb1-e5c0-43a3-a351-3b47b2d435e8
+MonkClassSlowfallPower	8ac259a9-9420-4ace-b286-6b020c4903f6
+MonkClassStunningFist	63771cef-eec9-4fa1-95ed-65448f9cc4fc
+MonkClassKiEmpoweredStrikes	a9019a35-7f69-473c-8627-80bd221f1f1e
+MonkSubclassWholenessOfBodyPower	07b02f28-9582-4047-86c9-39465a5d9634
+MonkCLassStillnessOfMindPower	15151bcc-5086-4e17-a918-f1b1dd18c71f
+MonkClassPurityOfBody	f274e05d-3b68-49f4-8298-152511c93f74
+MonkSubclassWayOfTheOpenHandUsedFeature	08393470-3f01-4adb-8811-c6d61acc460f
+MonkSubclassWayOfTheOpenHandWholenessOfBodyPower	34c3ce55-32f6-42f8-b866-2d429132c1a7

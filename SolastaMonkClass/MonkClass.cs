@@ -42,12 +42,18 @@ namespace SolastaMonkClass
         static public NewFeatureDefinitions.PowerWithRestrictions step_of_the_wind;
         static public FeatureDefinitionFeatureSet deflect_missiles;
         static public FeatureDefinitionAttributeModifier extra_attack;
-
+        static public FeatureDefinitionPower slowfall;
+        static public NewFeatureDefinitions.PowerWithRestrictions stunning_strike;
+        static public NewFeatureDefinitions.AddAttackTagForSpecificWeaponType ki_empowered_strikes;
+        static public FeatureDefinitionPower stillness_of_mind;
+        static public FeatureDefinitionFeatureSet purity_of_body;
         //way of the open hand
         static public FeatureDefinitionFeatureSet open_hand_technique;
         static public NewFeatureDefinitions.PowerWithRestrictions open_hand_technique_knock;
         static public NewFeatureDefinitions.PowerWithRestrictions open_hand_technique_push;
         static public NewFeatureDefinitions.PowerWithRestrictions open_hand_technique_forbid_reaction;
+        static public FeatureDefinitionPower wholeness_of_body;
+        //Way of Pirokine
 
         static public CharacterClassDefinition monk_class;
 
@@ -155,6 +161,11 @@ namespace SolastaMonkClass
             createKi();
             createDeflectMissiles();
             createExtraAttack();
+            createSlowfall();
+            createStunningStrike();
+            createKiEmpoweredStrikes();
+            createStillnessOfMind();
+            createPurityOfBody();
             Definition.FeatureUnlocks.Clear();
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(saving_throws, 1));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(weapon_proficiency, 1));
@@ -168,10 +179,16 @@ namespace SolastaMonkClass
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(step_of_the_wind, 2));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(deflect_missiles, 3));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 4));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(slowfall, 4));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(extra_attack, 5));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(stunning_strike, 5));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(unarmored_movement_improvements[6], 6));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(ki_empowered_strikes, 6));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionSavingThrowAffinitys.SavingThrowAffinityRogueEvasion, 7)); //evasion is the same as for rogue class
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(stillness_of_mind, 7));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 8));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(unarmored_movement_improvements[10], 10));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(purity_of_body, 10));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 12));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(unarmored_movement_improvements[14], 14));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 16));
@@ -182,6 +199,179 @@ namespace SolastaMonkClass
             subclassChoicesGuiPresentation.Title = "Subclass/&MonkSubclassMonasticTraditionTitle";
             subclassChoicesGuiPresentation.Description = "Subclass/&MonkSubclassMonasticTraditionDescription";
             MonkFeatureDefinitionSubclassChoice = this.BuildSubclassChoice(3, "MonasticTradition", false, "SubclassChoiceMonkSpecialistArchetypes", subclassChoicesGuiPresentation, MonkClassSubclassesGuid);
+        }
+
+
+        static void createPurityOfBody()
+        {
+            string purity_of_body_title_string = "Feature/&MonkClassPurityOfBodyTitle";
+            string purity_of_body_description_string = "Feature/&MonkClassPurityOfBodyDescription";
+
+            purity_of_body = Helpers.FeatureSetBuilder.createFeatureSet("MonkClassPurityOfBody",
+                                                                        "",
+                                                                        purity_of_body_title_string,
+                                                                        purity_of_body_description_string,
+                                                                        false,
+                                                                        FeatureDefinitionFeatureSet.FeatureSetMode.Union,
+                                                                        false,
+                                                                        DatabaseHelper.FeatureDefinitionConditionAffinitys.ConditionAffinityPoisonImmunity,
+                                                                        DatabaseHelper.FeatureDefinitionConditionAffinitys.ConditionAffinityDiseaseImmunity
+                                                                        );
+        }
+
+
+        static void createStillnessOfMind()
+        {
+            string stillness_of_mind_title_string = "Feature/&MonkClassStillnessOfMindTitle";
+            string stillness_of_mind_description_string = "Feature/&MonkClassStillnessOfMindDescription";
+
+            var effect = new EffectDescription();
+            effect.Copy(DatabaseHelper.SpellDefinitions.LesserRestoration.EffectDescription);
+            effect.DurationParameter = 1;
+            effect.SetRangeType(RuleDefinitions.RangeType.Self);
+            effect.SetRangeParameter(1);
+            effect.DurationParameter = 1;
+            effect.DurationType = RuleDefinitions.DurationType.Round;
+            effect.SetTargetType(RuleDefinitions.TargetType.Self);
+            effect.EffectForms.Clear();
+
+            var effect_form = new EffectForm();
+            effect_form.conditionForm = new ConditionForm();
+            effect_form.FormType = EffectForm.EffectFormType.Condition;
+            effect_form.conditionForm.operation = ConditionForm.ConditionOperation.RemoveDetrimentalRandom;
+            effect_form.conditionForm.detrimentalConditions = new List<ConditionDefinition>()
+            {
+                DatabaseHelper.ConditionDefinitions.ConditionCharmed,
+                DatabaseHelper.ConditionDefinitions.ConditionFrightened
+            };
+            effect.EffectForms.Add(effect_form);
+
+            stillness_of_mind = Helpers.PowerBuilder.createPower("MonkCLassStillnessOfMindPower",
+                                                     "",
+                                                     stillness_of_mind_title_string,
+                                                     stillness_of_mind_description_string,
+                                                     DatabaseHelper.FeatureDefinitionPowers.PowerPaladinDivineSense.GuiPresentation.spriteReference,
+                                                     DatabaseHelper.FeatureDefinitionPowers.PowerPaladinLayOnHands,
+                                                     effect,
+                                                     RuleDefinitions.ActivationTime.Action,
+                                                     1,
+                                                     RuleDefinitions.UsesDetermination.Fixed,
+                                                     RuleDefinitions.RechargeRate.AtWill
+                                                     );
+        }
+
+
+        static void createKiEmpoweredStrikes()
+        {
+            string ki_empowered_strikes_title_string = "Feature/&MonkClassKiEmpoweredStrikesTitle";
+            string ki_empowered_strikes_description_string = "Feature/&MonkClassKiEmpoweredStrikesDescription";
+
+            ki_empowered_strikes = Helpers.FeatureBuilder<NewFeatureDefinitions.AddAttackTagForSpecificWeaponType>.createFeature("MonkClassKiEmpoweredStrikes",
+                                                                                                                                "",
+                                                                                                                                ki_empowered_strikes_title_string,
+                                                                                                                                ki_empowered_strikes_description_string,
+                                                                                                                                Common.common_no_icon,
+                                                                                                                                a =>
+                                                                                                                                {
+                                                                                                                                    a.weaponTypes = monk_weapons;
+                                                                                                                                    a.tag = "Magical";
+                                                                                                                                }
+                                                                                                                                );
+        }
+
+
+        static void createStunningStrike()
+        {
+            string stunning_strike_title_string = "Feature/&MonkClassStunningStrikeTitle";
+            string stunning_strike_description_string = "Feature/&MonkClassStunningStrikeDescription";
+            string use_stunning_strike_react_description = "Reaction/&SpendMonkClassStunningStrikePowerReactDescription";
+            string use_stunning_strike_react_title = "Reaction/&CommonUsePowerReactTitle";
+
+            var effect = new EffectDescription();
+            effect.Copy(DatabaseHelper.FeatureDefinitionPowers.PowerDomainBattleDecisiveStrike.EffectDescription);
+            effect.DurationParameter = 1;
+            effect.DurationType = RuleDefinitions.DurationType.Instantaneous;
+            effect.SetSavingThrowDifficultyAbility(Helpers.Stats.Wisdom);
+            effect.SavingThrowAbility = Helpers.Stats.Constitution;
+            effect.SetDifficultyClassComputation(RuleDefinitions.EffectDifficultyClassComputation.AbilityScoreAndProficiency);
+            effect.EffectForms.Clear();
+
+            var effect_form = new EffectForm();
+            effect_form.ConditionForm = new ConditionForm();
+            effect_form.FormType = EffectForm.EffectFormType.Condition;
+            effect_form.ConditionForm.Operation = ConditionForm.ConditionOperation.Add;
+            effect_form.ConditionForm.ConditionDefinition = DatabaseHelper.ConditionDefinitions.ConditionStunned;
+            effect.EffectForms.Add(effect_form);
+
+            var power = Helpers.GenericPowerBuilder<NewFeatureDefinitions.PowerWithRestrictions>
+                                                        .createPower("MonkClassStunningFist",
+                                                                     "",
+                                                                     stunning_strike_title_string,
+                                                                     stunning_strike_description_string,
+                                                                     flurry_of_blows.GuiPresentation.SpriteReference,
+                                                                     effect,
+                                                                     RuleDefinitions.ActivationTime.OnAttackHit,
+                                                                     2,
+                                                                     RuleDefinitions.UsesDetermination.Fixed,
+                                                                     RuleDefinitions.RechargeRate.ShortRest
+                                                                     );
+            
+            power.restrictions = new List<NewFeatureDefinitions.IRestriction>()
+                                            {
+                                                new NewFeatureDefinitions.NoRangedWeaponRestriction() //TODO: make aproper check that the attack is done with melee weapon
+                                            };
+            power.checkReaction = true;
+
+            power.linkedPower = flurry_of_blows;
+
+            ki.powers.Add(power);
+            Helpers.StringProcessing.addPowerReactStrings(power, stunning_strike_title_string, use_stunning_strike_react_description,
+                                            use_stunning_strike_react_title, use_stunning_strike_react_description, "SpendPower");
+            stunning_strike = power;
+        }
+
+
+        static void createSlowfall()
+        {
+            string slowfall_title_string = "Feature/&MonkClasSlowfallTitle";
+            string slowfall_description_string = "Feature/&MonkClasSlowfallDescription";
+
+            string use_slowfall_react_description = "Reaction/&UseMonkClasSlowfallPowerReactDescription";
+            string use_slowfall_react_title = "Reaction/&CommonUsePowerReactTitle";
+            string use_slowfall_description = use_slowfall_react_description;
+            string use_slowfall_title = slowfall_title_string;
+
+            var effect = new EffectDescription();
+            effect.Copy(DatabaseHelper.SpellDefinitions.FeatherFall.EffectDescription);
+            effect.SetRangeType(RuleDefinitions.RangeType.Self);
+            effect.SetRangeParameter(1);
+            effect.DurationParameter = 1;
+            effect.DurationType = RuleDefinitions.DurationType.Round;
+            effect.EffectForms.Clear();
+            effect.SetTargetType(RuleDefinitions.TargetType.Self);
+
+            var effect_form = new EffectForm();
+            effect_form.ConditionForm = new ConditionForm();
+            effect_form.FormType = EffectForm.EffectFormType.Condition;
+            effect_form.ConditionForm.Operation = ConditionForm.ConditionOperation.Add;
+            effect_form.ConditionForm.ConditionDefinition = DatabaseHelper.ConditionDefinitions.ConditionFeatherFalling;
+            effect.EffectForms.Add(effect_form);
+
+            slowfall = Helpers.GenericPowerBuilder<FeatureDefinitionPower>
+                                            .createPower("MonkClassSlowfallPower",
+                                                         "",
+                                                         slowfall_title_string,
+                                                         slowfall_description_string,
+                                                         DatabaseHelper.SpellDefinitions.FeatherFall.GuiPresentation.SpriteReference,
+                                                         effect,
+                                                         RuleDefinitions.ActivationTime.Reaction,
+                                                         1,
+                                                         RuleDefinitions.UsesDetermination.Fixed,
+                                                         RuleDefinitions.RechargeRate.AtWill
+                                                         );
+
+            Helpers.StringProcessing.addPowerReactStrings(slowfall, use_slowfall_title, use_slowfall_description,
+                                                                    use_slowfall_react_title, use_slowfall_react_description);
         }
 
 
@@ -257,8 +447,8 @@ namespace SolastaMonkClass
                                                                                                                            {
                                                                                                                                a.restrictedActions = new List<ActionDefinitions.Id>
                                                                                                                                {
-                                                                                                                                   ActionDefinitions.Id.DisengageMain,
-                                                                                                                                   ActionDefinitions.Id.DashMain
+                                                                                                                                   ActionDefinitions.Id.DisengageBonus,
+                                                                                                                                   ActionDefinitions.Id.DashBonus
                                                                                                                                };
                                                                                                                            }
                                                                                                                            );
@@ -650,7 +840,7 @@ namespace SolastaMonkClass
             createOpenHandTechniquePush();
             createOpenHandTechniqueForbidReaction();
 
-            var open_hand_used_feature = Helpers.FeatureBuilder<NewFeatureDefinitions.ApplyConditionOnPowerUseToSelf>.createFeature("MonkSubclassWayOfTheOpenHandUsedCondition",
+            var open_hand_used_feature = Helpers.FeatureBuilder<NewFeatureDefinitions.ApplyConditionOnPowerUseToSelf>.createFeature("MonkSubclassWayOfTheOpenHandUsedFeature",
                                                                                                                                       "",
                                                                                                                                       Common.common_no_title,
                                                                                                                                       Common.common_no_title,
@@ -739,7 +929,6 @@ namespace SolastaMonkClass
             power.checkReaction = true;
 
             open_hand_technique_forbid_reaction = power;
-            ki.powers.Add(open_hand_technique_forbid_reaction);
 
             Helpers.StringProcessing.addPowerReactStrings(open_hand_technique_forbid_reaction, open_hand_forbid_reaction_title_string, use_open_hand_forbid_reaction_react_description,
                                                                     use_open_hand_forbid_reaction_react_title, use_open_hand_forbid_reaction_react_description, "SpendPower");
@@ -790,7 +979,6 @@ namespace SolastaMonkClass
 
             open_hand_technique_push = power;
 
-            ki.powers.Add(open_hand_technique_push);
             Helpers.StringProcessing.addPowerReactStrings(open_hand_technique_push, open_hand_push_title_string, use_open_hand_push_react_description,
                                                         use_open_hand_push_react_title, use_open_hand_push_react_description, "SpendPower");
         }
@@ -839,15 +1027,54 @@ namespace SolastaMonkClass
 
             open_hand_technique_knock = power;
 
-            ki.powers.Add(open_hand_technique_knock);
             Helpers.StringProcessing.addPowerReactStrings(open_hand_technique_knock, open_hand_knock_title_string, use_open_hand_knock_react_description,
                                             use_open_hand_knock_react_title, use_open_hand_knock_react_description, "SpendPower");
+        }
+
+
+        static void createWholenessOfBody()
+        {
+            string wholeness_of_body_title_string = "Feature/&MonkSubclassWayOfTheOpenHandWholenessOfBodyTitle";
+            string wholeness_of_body_description_string = "Feature/&MonkSubclassWayOfTheOpenHandWholenessOfBodyDescription";
+
+            var effect = new EffectDescription();
+            effect.Copy(DatabaseHelper.SpellDefinitions.CureWounds.EffectDescription);
+            effect.DurationParameter = 1;
+            effect.SetRangeType(RuleDefinitions.RangeType.Self);
+            effect.SetRangeParameter(1);
+            effect.DurationParameter = 1;
+            effect.DurationType = RuleDefinitions.DurationType.Round;
+            effect.SetTargetType(RuleDefinitions.TargetType.Self);
+            effect.EffectForms.Clear();
+
+            var effect_form = new EffectForm();
+            effect_form.healingForm = new HealingForm();
+            effect_form.FormType = EffectForm.EffectFormType.Healing;
+            effect_form.healingForm.diceNumber = 3;
+            effect_form.healingForm.dieType = RuleDefinitions.DieType.D1;
+            effect_form.SetApplyLevel(EffectForm.LevelApplianceType.Multiply);
+            effect_form.SetLevelType(RuleDefinitions.LevelSourceType.ClassLevel);
+            effect.EffectForms.Add(effect_form);
+
+            wholeness_of_body = Helpers.PowerBuilder.createPower("MonkSubclassWayOfTheOpenHandWholenessOfBodyPower",
+                                                                 "",
+                                                                 wholeness_of_body_title_string,
+                                                                 wholeness_of_body_description_string,
+                                                                 DatabaseHelper.FeatureDefinitionPowers.PowerTraditionShockArcanistArcaneShock.GuiPresentation.spriteReference,
+                                                                 DatabaseHelper.FeatureDefinitionPowers.PowerPaladinLayOnHands,
+                                                                 effect,
+                                                                 RuleDefinitions.ActivationTime.Action,
+                                                                 1,
+                                                                 RuleDefinitions.UsesDetermination.Fixed,
+                                                                 RuleDefinitions.RechargeRate.LongRest
+                                                                 );
         }
 
 
         static CharacterSubclassDefinition createWayOfTheOpenHand()
         {
             createOpenHandTechnique();
+            createWholenessOfBody();
 
             var gui_presentation = new GuiPresentationBuilder(
                     "Subclass/&MonkSubclassWayOfTheOpenHandDescription",
@@ -858,6 +1085,7 @@ namespace SolastaMonkClass
             CharacterSubclassDefinition definition = new CharacterSubclassDefinitionBuilder("MonkSubclassWayOfTheOpenHand", "4c6e8abe-1983-49b7-bc3b-2572865f6c17")
                     .SetGuiPresentation(gui_presentation)
                     .AddFeatureAtLevel(open_hand_technique, 3)
+                    .AddFeatureAtLevel(wholeness_of_body, 3)
                     .AddToDB();
 
             return definition;

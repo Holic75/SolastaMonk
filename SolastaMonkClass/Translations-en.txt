@@ -26,18 +26,32 @@ Feature/&MonkClassStepOfTheWindPowerTitle Step of the Wind
 Feature/&MonkClassStepOfTheWindPowerDescription You can spend 1 ki point to take the Disengage or Dash action as a bonus action on your turn, and your jump distance is doubled for the turn.
 Feature/&MonkClassDeflectMissilesTitle Deflect Missiles
 Feature/&MonkClassDeflectMissilesDescription Starting at 3rd level, you can use your reaction to deflect or catch the missile when you are hit by a ranged weapon attack. When you do so, the damage you take from the attack is reduced by 1d10 + your Dexterity modifier + your monk level.
+Feature/&MonkClasSlowfallTitle Slowfall
+Feature/&MonkClasSlowfallDescription Beginning at 4th Level, you can use your Reaction when you fall to prevent damage from falling and land on your feet.
+Reaction/&UseMonkClasSlowfallPowerReactDescription Use your your reactionto prevent damage from fall and land on your feet.
+Feature/&MonkClassStunningStrikeTitle Stunning Strike
+Feature/&MonkClassStunningStrikeDescription Starting at 5th Level, you can interfere with the flow of ki in an opponent's body. When you hit another creature with a melee weapon Attack, you can spend 1 ki point to attempt a Stunning Strike. The target must succeed on a Constitution saving throw or be Stunned until the end of your next turn.
+Reaction/&SpendMonkClassStunningStrikePowerReactDescription Spend 1 ki point to attempt to stun the target.
+Feature/&MonkClassKiEmpoweredStrikesTitle Ki-Empowered Strikes
+Feature/&MonkClassKiEmpoweredStrikesDescription Starting at 6th level, your unarmed strikes count as magical for the Purpose of overcoming Resistance and immunity to nonmagical attacks and damage.
+Feature/&MonkClassStillnessOfMindTitle Stillness of Mind
+Feature/&MonkClassStillnessOfMindDescription Starting at 7th level, you can use your action to end one effect on yourself that is causing you to be charmed or frightened.
+Feature/&MonkClassPurityOfBodyTitle Purity of Body
+Feature/&MonkClassPurityOfBodyDescription At 10th level, your mastery of the ki flowing through you makes you immune to disease and poison.
 Subclass/&MonkSubclassWayOfTheOpenHandTitle Way of the Open Hand
 Subclass/&MonkSubclassWayOfTheOpenHandDescription Monks of the Way of the Open Hand are the ultimate masters of martial arts combat, whether armed or unarmed. They learn techniques to push and trip their opponents, manipulate ki to heal damage to their bodies, and practice advanced meditation that can protect them from harm.
 Feature/&MonkSubclassWayOfTheOpenHandTechniqueTitle Open Hand Technique
-Feature/&MonkSubclassWayOfTheOpenHandTechniqueDescription Starting when you choose this tradition at 3rd level, you can manipulate your enemy’s ki when you harness your own. Whenever you hit a creature with one of the attacks granted by your Flurry of Blows, you can impose one of the following effects on that target:\n- It must succeed on a Dexterity saving throw or be knocked prone.\n- It must make a Strength saving throw. If it fails, you can push it up to 15 feet away from you.\n- It can’t take reactions until the end of your next turn.
+Feature/&MonkSubclassWayOfTheOpenHandTechniqueDescription Starting when you choose this tradition at 3rd level, you can manipulate your enemy's ki when you harness your own. Whenever you hit a creature with one of the attacks granted by your Flurry of Blows, you can impose one of the following effects on that target:\n- It must succeed on a Dexterity saving throw or be knocked prone.\n- It must make a Strength saving throw. If it fails, you can push it up to 15 feet away from you.\n- It can't take reactions until the end of your next turn.
 Feature/&MonkSubclassWayOfTheOpenHandForbidReactionTitle Open Hand Technique: Forbid Reactions
 Feature/&MonkSubclassWayOfTheOpenHandForbidReactionDescription Target can't take reactions until the end of your next turn.
 Rules/&ConditionMonkSubclassWayOfTheOpenHandForbidReactionPowerTitle Reactions Forbidden
 Rules/&ConditionMonkSubclassWayOfTheOpenHandForbidReactionPowerDescription You can not take reactions.
-Reaction/&SpendMonkSubclassWayOfTheOpenHandForbidReactionPowerReactDescription Spend one ki point to prevent target from using reactions.
+Reaction/&SpendMonkSubclassWayOfTheOpenHandForbidReactionPowerReactDescription Prevent target from using reactions.
 Feature/&MonkSubclassWayOfTheOpenHandPushTitle Open Hand Technique: Push
 Feature/&MonkSubclassWayOfTheOpenHandPushDescription Target must make a Strength saving throw. If it fails, you can push it up to 15 feet away from you.
-Reaction/&SpendMonkSubclassWayOfTheOpenHandPushPowerReactDescription Spend one ki point to attmept to push the target.
+Reaction/&SpendMonkSubclassWayOfTheOpenHandPushPowerReactDescription Attmept to push the target.
 Feature/&MonkSubclassWayOfTheOpenHandKnockTitle Open Hand Technique: Knock
 Feature/&MonkSubclassWayOfTheOpenHandKnockDescription Target must succeed on a Dexterity saving throw or be knocked prone.
-Reaction/&SpendMonkSubclassWayOfTheOpenHandKnockPowerReactDescription Spend one ki point to attmept to knockdown the target.
+Reaction/&SpendMonkSubclassWayOfTheOpenHandKnockPowerReactDescription Attmept to knockdown the target.
+Feature/&MonkSubclassWayOfTheOpenHandWholenessOfBodyTitle Wholeness of Body
+Feature/&MonkSubclassWayOfTheOpenHandWholenessOfBodyDescription At 6th level, you gain the ability to heal yourself. As an action, you can regain hit points equal to three times your monk level. You must finish a long rest before you can use this feature again.
