@@ -34,6 +34,8 @@ Feature/&MonkClassStunningStrikeDescription Starting at 5th Level, you can inter
 Reaction/&SpendMonkClassStunningStrikePowerReactDescription Spend 1 ki point to attempt to stun the target.
 Feature/&MonkClassKiEmpoweredStrikesTitle Ki-Empowered Strikes
 Feature/&MonkClassKiEmpoweredStrikesDescription Starting at 6th level, your unarmed strikes count as magical for the Purpose of overcoming Resistance and immunity to nonmagical attacks and damage.
+Feature/&MonkClassUnarmoredMovement9Title Unarmored Movement Improvement (Vertical Surfaces)
+Feature/&MonkClassUnarmoredMovement9Description  At 9th level, you gain the ability to move along vertical surfaces and across liquids on your turn without falling during your move.
 Feature/&MonkClassStillnessOfMindTitle Stillness of Mind
 Feature/&MonkClassStillnessOfMindDescription Starting at 7th level, you can use your action to end one effect on yourself that is causing you to be charmed or frightened.
 Feature/&MonkClassPurityOfBodyTitle Purity of Body

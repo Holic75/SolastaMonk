@@ -46,6 +46,7 @@ namespace SolastaMonkClass
         static public NewFeatureDefinitions.PowerWithRestrictions stunning_strike;
         static public NewFeatureDefinitions.AddAttackTagForSpecificWeaponType ki_empowered_strikes;
         static public FeatureDefinitionPower stillness_of_mind;
+        static public NewFeatureDefinitions.ProvideConditionForTurnDuration unarmored_movement_vertical_surface;
         static public FeatureDefinitionFeatureSet purity_of_body;
         //way of the open hand
         static public FeatureDefinitionFeatureSet open_hand_technique;
@@ -165,6 +166,7 @@ namespace SolastaMonkClass
             createStunningStrike();
             createKiEmpoweredStrikes();
             createStillnessOfMind();
+            createUnarmoredMovementVerticalSurfaces();
             createPurityOfBody();
             Definition.FeatureUnlocks.Clear();
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(saving_throws, 1));
@@ -187,6 +189,7 @@ namespace SolastaMonkClass
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionSavingThrowAffinitys.SavingThrowAffinityRogueEvasion, 7)); //evasion is the same as for rogue class
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(stillness_of_mind, 7));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 8));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(unarmored_movement_vertical_surface, 9));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(unarmored_movement_improvements[10], 10));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(purity_of_body, 10));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 12));
@@ -199,6 +202,36 @@ namespace SolastaMonkClass
             subclassChoicesGuiPresentation.Title = "Subclass/&MonkSubclassMonasticTraditionTitle";
             subclassChoicesGuiPresentation.Description = "Subclass/&MonkSubclassMonasticTraditionDescription";
             MonkFeatureDefinitionSubclassChoice = this.BuildSubclassChoice(3, "MonasticTradition", false, "SubclassChoiceMonkSpecialistArchetypes", subclassChoicesGuiPresentation, MonkClassSubclassesGuid);
+        }
+
+
+        static void createUnarmoredMovementVerticalSurfaces()
+        {
+            string unarmored_movement9_title_string = "Feature/&MonkClassUnarmoredMovement9Title";
+            string unarmored_movement9_description_string = "Feature/&MonkClassUnarmoredMovement9Description";
+
+            var condtion = Helpers.CopyFeatureBuilder<ConditionDefinition>.createFeatureCopy("MonkClassUnarmoredMovement9Condition",
+                                                                                             "",
+                                                                                             unarmored_movement9_title_string,
+                                                                                             unarmored_movement9_description_string,
+                                                                                             null,
+                                                                                             DatabaseHelper.ConditionDefinitions.ConditionSpiderClimb
+                                                                                             );
+            unarmored_movement_vertical_surface = Helpers.FeatureBuilder<NewFeatureDefinitions.ProvideConditionForTurnDuration>.createFeature("MonkClassUnarmoredMovement9Condition",
+                                                                                                                                              "",
+                                                                                                                                              unarmored_movement9_title_string,
+                                                                                                                                              unarmored_movement9_description_string,
+                                                                                                                                              Common.common_no_icon,
+                                                                                                                                              a =>
+                                                                                                                                              {
+                                                                                                                                                  a.condition = condtion;
+                                                                                                                                                  a.restrictions = new List<NewFeatureDefinitions.IRestriction>
+                                                                                                                                                  {
+                                                                                                                                                      new NewFeatureDefinitions.NoArmorRestriction(),
+                                                                                                                                                      new NewFeatureDefinitions.NoShieldRestriction()
+                                                                                                                                                  };
+                                                                                                                                              }
+                                                                                                                                              );
         }
 
 

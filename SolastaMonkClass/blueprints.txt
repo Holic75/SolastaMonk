@@ -103,3 +103,4 @@ MonkCLassStillnessOfMindPower	15151bcc-5086-4e17-a918-f1b1dd18c71f
 MonkClassPurityOfBody	f274e05d-3b68-49f4-8298-152511c93f74
 MonkSubclassWayOfTheOpenHandUsedFeature	08393470-3f01-4adb-8811-c6d61acc460f
 MonkSubclassWayOfTheOpenHandWholenessOfBodyPower	34c3ce55-32f6-42f8-b866-2d429132c1a7
+MonkClassUnarmoredMovement9Condition	7181d2d8-5d33-4364-a3b2-061811a62b3e
