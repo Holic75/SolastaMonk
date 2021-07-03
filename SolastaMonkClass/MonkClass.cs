@@ -344,7 +344,7 @@ namespace SolastaMonkClass
             effect_form.ConditionForm.Operation = ConditionForm.ConditionOperation.Add;
             effect_form.ConditionForm.ConditionDefinition = DatabaseHelper.ConditionDefinitions.ConditionStunned;
             effect.EffectForms.Add(effect_form);
-            effect.SetEndOfEffect(RuleDefinitions.TurnOccurenceType.StartOfTurn);
+            effect.SetEndOfEffect(RuleDefinitions.TurnOccurenceType.EndOfTurn);
 
             var power = Helpers.GenericPowerBuilder<NewFeatureDefinitions.PowerWithRestrictions>
                                                         .createPower("MonkClassStunningFist",
@@ -791,6 +791,7 @@ namespace SolastaMonkClass
                                                                                                                     a.armorAllowed = false;
                                                                                                                     a.shieldAlowed = false;
                                                                                                                     a.stat = Helpers.Stats.Wisdom;
+                                                                                                                    a.exclusive = true;
                                                                                                                     a.forbiddenConditions = new List<ConditionDefinition>
                                                                                                                     {
                                                                                                                         DatabaseHelper.ConditionDefinitions.ConditionBarkskin,
@@ -956,7 +957,7 @@ namespace SolastaMonkClass
 
             var effect = new EffectDescription();
             effect.Copy(DatabaseHelper.FeatureDefinitionPowers.PowerDomainBattleDecisiveStrike.EffectDescription);
-            effect.DurationParameter = 2;
+            effect.DurationParameter = 1;
             effect.DurationType = RuleDefinitions.DurationType.Round;
             effect.SetSavingThrowDifficultyAbility(Helpers.Stats.Wisdom);
             effect.SavingThrowAbility = Helpers.Stats.Strength;
@@ -969,7 +970,7 @@ namespace SolastaMonkClass
             effect_form.ConditionForm.Operation = ConditionForm.ConditionOperation.Add;
             effect_form.ConditionForm.ConditionDefinition = condition;
             effect.EffectForms.Add(effect_form);
-            effect.SetEndOfEffect(RuleDefinitions.TurnOccurenceType.StartOfTurn);
+            effect.SetEndOfEffect(RuleDefinitions.TurnOccurenceType.EndOfTurn);
 
             var power = Helpers.GenericPowerBuilder<NewFeatureDefinitions.PowerWithRestrictions>
                                                         .createPower("MonkSubclassWayOfTheOpenHandForbidReaction",
@@ -1332,7 +1333,7 @@ namespace SolastaMonkClass
 
             var effect = new EffectDescription();
             effect.Copy(DatabaseHelper.FeatureDefinitionPowers.PowerDomainBattleDecisiveStrike.EffectDescription);
-            effect.DurationParameter = 2;
+            effect.DurationParameter = 1;
             effect.DurationType = RuleDefinitions.DurationType.Round;
             effect.SetSavingThrowDifficultyAbility(Helpers.Stats.Wisdom);
             effect.SavingThrowAbility = Helpers.Stats.Wisdom;
@@ -1348,7 +1349,7 @@ namespace SolastaMonkClass
             effect_form.hasSavingThrow = true;
             effect_form.SavingThrowAffinity = RuleDefinitions.EffectSavingThrowType.Negates;
             effect.EffectForms.Add(effect_form);
-            effect.SetEndOfEffect(RuleDefinitions.TurnOccurenceType.StartOfTurn);
+            effect.SetEndOfEffect(RuleDefinitions.TurnOccurenceType.EndOfTurn);
 
             var power = Helpers.GenericPowerBuilder<NewFeatureDefinitions.PowerWithRestrictions>
                                                         .createPower("MonkSubclassWayOfThePyrokineBlind",
