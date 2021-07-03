@@ -23,6 +23,8 @@ Feature/&MonkClassFlurryOfBlowsPowerDescription Immediately after you take the A
 Feature/&MonkClassPatientDefensePowerTitle Patient Defense
 Feature/&MonkClassPatientDefensePowerDescription You can spend 1 ki point to take the Dodge action as a bonus action on your turn.
 Feature/&MonkClassStepOfTheWindPowerTitle Step of the Wind
+Feature/&MonkClassStepOfTheWindDashPowerTitle Step of the Wind (Dash)
+Feature/&MonkClassStepOfTheWindDisengagePowerTitle Step of the Wind (Disengage)
 Feature/&MonkClassStepOfTheWindPowerDescription You can spend 1 ki point to take the Disengage or Dash action as a bonus action on your turn, and your jump distance is doubled for the turn.
 Feature/&MonkClassDeflectMissilesTitle Deflect Missiles
 Feature/&MonkClassDeflectMissilesDescription Starting at 3rd level, you can use your reaction to deflect or catch the missile when you are hit by a ranged weapon attack. When you do so, the damage you take from the attack is reduced by 1d10 + your Dexterity modifier + your monk level.
@@ -57,3 +59,20 @@ Feature/&MonkSubclassWayOfTheOpenHandKnockDescription Target must succeed on a D
 Reaction/&SpendMonkSubclassWayOfTheOpenHandKnockPowerReactDescription Attmept to knockdown the target.
 Feature/&MonkSubclassWayOfTheOpenHandWholenessOfBodyTitle Wholeness of Body
 Feature/&MonkSubclassWayOfTheOpenHandWholenessOfBodyDescription At 6th level, you gain the ability to heal yourself. As an action, you can regain hit points equal to three times your monk level. You must finish a long rest before you can use this feature again.
+Subclass/&MonkSubclassWayOfThePyrokineTitle Way of the Searing Flame
+Subclass/&MonkSubclassWayOfThePyrokineDescription When you look into flames they don't just look back at you, they gaze into your soul and light the eternal fire burning within. With practice and discipline you harness this internal blaze, manifesting it to make your strikes scorch flesh, your blows singeing foes.
+Feature/&MonkSubclassWayOfThePyrokineTechniqueTitle Blazing Technique
+Feature/&MonkSubclassWayOfThePyrokineTechniqueDescription When you choose this tradition at 3rd level, you learn to summon flame using ki. Whenever you hit a a creature with one of the attacks granted by your Flurry of Blows, you can impose one of the following effects on that target:\n- It must succeed on a Dexterity saving throw or it ignites. Until a creature takes an action to douse the fire, the target takes 2 (1d4) fire damage at the start of each of its turns.\n -It takes an extra 1d4 fire damage.\n -It must succeed on a Wisdom saving throw or become blind until the end of your next turn.
+Feature/&MonkSubclassWayOfThePyrokineBurnTitle Blazing Technique: Ignite
+Feature/&MonkSubclassWayOfThePyrokineBurnDescription Target must succeed on a Dexterity saving throw or it ignites. The target takes (1d4) fire damage at the start of each of its turns. Every turn the target can attempt a Dexterity savingthrow; the condition is removed in case of success.
+Rules/&ConditionMonkSubclassWayOfThePyrokineBurnPowerTitle Burning
+Rules/&ConditionMonkSubclassWayOfThePyrokineBurnPowerDescription You take 1d4 fire damage at the beginning of each turn, until you succeed on a Dexterity savingthrow.
+Reaction/&SpendMonkSubclassWayOfThePyrokineBurnPowerReactDescription Attempt to ignite the target.
+Feature/&MonkSubclassWayOfThePyrokineDamageTitle Blazing Technique: Damage
+Feature/&MonkSubclassWayOfThePyrokineDamageDescription Target takes extra 1d4 points of fire damage.
+Reaction/&SpendMonkSubclassWayOfThePyrokineDamagePowerReactDescription Deal extra fire damage to target.
+Feature/&MonkSubclassWayOfThePyrokineBlindTitle Blazing Technique: Blind
+Feature/&MonkSubclassWayOfThePyrokineBlindDescription Target must succeed on a Wisdom saving throw or be blinded until the end of your next turn.
+Reaction/&SpendMonkSubclassWayOfThePyrokineBlindPowerReactDescription Attmept to blind the target.
+Feature/&MonkSubclassWayOfThePyrokineBurningDevotionTitle Burning Devotion
+Feature/&MonkSubclassWayOfThePyrokineBurningDevotionDescription At 6th level, you gain resistance to fire damage.

@@ -30,6 +30,7 @@ namespace SolastaMonkClass
             Helpers.WeaponProficiencies.Spear,
             Helpers.WeaponProficiencies.Unarmed
         };
+        static public CharacterClassDefinition monk_class;
         static public NewFeatureDefinitions.ArmorClassStatBonus unarmored_defense;
         static public FeatureDefinitionFeatureSet martial_arts;
         static public NewFeatureDefinitions.MovementBonusBasedOnEquipment unarmored_movement;
@@ -39,7 +40,8 @@ namespace SolastaMonkClass
         static public ConditionDefinition flurry_of_blows_condition;
         static public NewFeatureDefinitions.PowerWithRestrictions flurry_of_blows;
         static public NewFeatureDefinitions.PowerWithRestrictions patient_defense;
-        static public NewFeatureDefinitions.PowerWithRestrictions step_of_the_wind;
+        static public FeatureDefinitionFeatureSet step_of_the_wind;
+        static public List<NewFeatureDefinitions.PowerWithRestrictions> step_of_the_wind_powers = new List<NewFeatureDefinitions.PowerWithRestrictions>();
         static public FeatureDefinitionFeatureSet deflect_missiles;
         static public FeatureDefinitionAttributeModifier extra_attack;
         static public FeatureDefinitionPower slowfall;
@@ -54,9 +56,13 @@ namespace SolastaMonkClass
         static public NewFeatureDefinitions.PowerWithRestrictions open_hand_technique_push;
         static public NewFeatureDefinitions.PowerWithRestrictions open_hand_technique_forbid_reaction;
         static public FeatureDefinitionPower wholeness_of_body;
-        //Way of Pirokine
-
-        static public CharacterClassDefinition monk_class;
+        //Way of Pyrokine
+        static public FeatureDefinitionFeatureSet blazing_technique;
+        static public NewFeatureDefinitions.PowerWithRestrictions blazing_technique_burn;
+        static public NewFeatureDefinitions.PowerWithRestrictions blazing_technique_damage;
+        static public NewFeatureDefinitions.PowerWithRestrictions blazing_technique_blind;
+        static public FeatureDefinitionFeatureSet burning_devotion;
+        //
 
 
         protected MonkClassBuilder(string name, string guid) : base(name, guid)
@@ -128,7 +134,7 @@ namespace SolastaMonkClass
 
             this.AddEquipmentRow(new List<CharacterClassDefinition.HeroEquipmentOption>
             {
-                EquipmentOptionsBuilder.Option(DatabaseHelper.ItemDefinitions.Dart, EquipmentDefinitions.OptionWeapon, 10),
+                EquipmentOptionsBuilder.Option(DatabaseHelper.ItemDefinitions.Dart, EquipmentDefinitions.OptionWeapon, 10)
             });
 
             var saving_throws = Helpers.ProficiencyBuilder.CreateSavingthrowProficiency("MonkSavingthrowProficiency",
@@ -264,7 +270,7 @@ namespace SolastaMonkClass
             effect.SetRangeType(RuleDefinitions.RangeType.Self);
             effect.SetRangeParameter(1);
             effect.DurationParameter = 1;
-            effect.DurationType = RuleDefinitions.DurationType.Round;
+            effect.DurationType = RuleDefinitions.DurationType.Instantaneous;
             effect.SetTargetType(RuleDefinitions.TargetType.Self);
             effect.EffectForms.Clear();
 
@@ -306,7 +312,10 @@ namespace SolastaMonkClass
                                                                                                                                 Common.common_no_icon,
                                                                                                                                 a =>
                                                                                                                                 {
-                                                                                                                                    a.weaponTypes = monk_weapons;
+                                                                                                                                    a.weaponTypes = new List<string>
+                                                                                                                                    {
+                                                                                                                                        Helpers.WeaponProficiencies.Unarmed
+                                                                                                                                    };
                                                                                                                                     a.tag = "Magical";
                                                                                                                                 }
                                                                                                                                 );
@@ -323,7 +332,7 @@ namespace SolastaMonkClass
             var effect = new EffectDescription();
             effect.Copy(DatabaseHelper.FeatureDefinitionPowers.PowerDomainBattleDecisiveStrike.EffectDescription);
             effect.DurationParameter = 1;
-            effect.DurationType = RuleDefinitions.DurationType.Instantaneous;
+            effect.DurationType = RuleDefinitions.DurationType.Round;
             effect.SetSavingThrowDifficultyAbility(Helpers.Stats.Wisdom);
             effect.SavingThrowAbility = Helpers.Stats.Constitution;
             effect.SetDifficultyClassComputation(RuleDefinitions.EffectDifficultyClassComputation.AbilityScoreAndProficiency);
@@ -351,7 +360,7 @@ namespace SolastaMonkClass
             
             power.restrictions = new List<NewFeatureDefinitions.IRestriction>()
                                             {
-                                                new NewFeatureDefinitions.NoRangedWeaponRestriction() //TODO: make aproper check that the attack is done with melee weapon
+                                                new NewFeatureDefinitions.NoRangedWeaponRestriction() //TODO: make a proper check that the attack is done with melee weapon
                                             };
             power.checkReaction = true;
 
@@ -453,7 +462,8 @@ namespace SolastaMonkClass
                                                                                                                     Common.common_no_icon,
                                                                                                                     a =>
                                                                                                                     {
-                                                                                                                        a.powers = new List<FeatureDefinitionPower> { flurry_of_blows, patient_defense, step_of_the_wind };
+                                                                                                                        a.powers = new List<FeatureDefinitionPower> { flurry_of_blows, patient_defense,
+                                                                                                                                                                      step_of_the_wind_powers[0], step_of_the_wind_powers[1] };
                                                                                                                         a.characterClass = monk_class;
                                                                                                                         a.levelIncreaseList = new List<(int, int)>();
                                                                                                                         for (int i = 3; i <= 20; i++)
@@ -468,23 +478,9 @@ namespace SolastaMonkClass
         static void createStepOfTheWind()
         {
             string step_of_the_wind_title_string = "Feature/&MonkClassStepOfTheWindPowerTitle";
+            string step_of_the_wind_dash_title_string = "Feature/&MonkClassStepOfTheWindDashPowerTitle";
+            string step_of_the_wind_disengage_title_string = "Feature/&MonkClassStepOfTheWindDisengagePowerTitle";
             string step_of_the_wind_description_string = "Feature/&MonkClassStepOfTheWindPowerDescription";
-
-            var step_of_the_wind_feature = Helpers.CopyFeatureBuilder<FeatureDefinitionAdditionalAction>.createFeatureCopy("MonkClassStepOfTheWindFeature",
-                                                                                                                           "",
-                                                                                                                           Common.common_no_title,
-                                                                                                                           Common.common_no_title,
-                                                                                                                           null,
-                                                                                                                           DatabaseHelper.FeatureDefinitionAdditionalActions.AdditionalActionHasted,
-                                                                                                                           a =>
-                                                                                                                           {
-                                                                                                                               a.restrictedActions = new List<ActionDefinitions.Id>
-                                                                                                                               {
-                                                                                                                                   ActionDefinitions.Id.DisengageBonus,
-                                                                                                                                   ActionDefinitions.Id.DashBonus
-                                                                                                                               };
-                                                                                                                           }
-                                                                                                                           );
 
             var step_of_the_wind_condition = Helpers.ConditionBuilder.createCondition("MonkClassStepOfTheWindCondition",
                                                                                      "",
@@ -492,44 +488,73 @@ namespace SolastaMonkClass
                                                                                      step_of_the_wind_description_string,
                                                                                      null,
                                                                                      DatabaseHelper.ConditionDefinitions.ConditionHasted,
-                                                                                     step_of_the_wind_feature,
                                                                                      DatabaseHelper.FeatureDefinitionMovementAffinitys.MovementAffinityJump
                                                                                      );
             step_of_the_wind_condition.SetSubsequentOnRemoval(null);
-            var effect = new EffectDescription();
-            effect.Copy(DatabaseHelper.SpellDefinitions.Haste.EffectDescription);
-            effect.SetRangeType(RuleDefinitions.RangeType.Self);
-            effect.SetRangeParameter(1);
-            effect.DurationParameter = 1;
-            effect.DurationType = RuleDefinitions.DurationType.Round;
-            effect.EffectForms.Clear();
-            effect.SetTargetType(RuleDefinitions.TargetType.Self);
+            step_of_the_wind_powers = new List<NewFeatureDefinitions.PowerWithRestrictions>();
 
-            var effect_form = new EffectForm();
-            effect_form.ConditionForm = new ConditionForm();
-            effect_form.FormType = EffectForm.EffectFormType.Condition;
-            effect_form.ConditionForm.Operation = ConditionForm.ConditionOperation.Add;
-            effect_form.ConditionForm.ConditionDefinition = step_of_the_wind_condition;
-            effect.EffectForms.Add(effect_form);
+            List<(string title, ConditionDefinition condition, AssetReferenceSprite sprite)> power_tuples = new List<(string title, ConditionDefinition condition, AssetReferenceSprite sprite)>
+            {
+                (step_of_the_wind_dash_title_string, DatabaseHelper.ConditionDefinitions.ConditionDashing, DatabaseHelper.FeatureDefinitionPowers.PowerOathOfMotherlandVolcanicAura.GuiPresentation.SpriteReference),
+                (step_of_the_wind_disengage_title_string, DatabaseHelper.ConditionDefinitions.ConditionDisengaging, DatabaseHelper.FeatureDefinitionPowers.PowerOathOfDevotionAuraDevotion.GuiPresentation.SpriteReference),
 
-            step_of_the_wind = Helpers.GenericPowerBuilder<NewFeatureDefinitions.PowerWithRestrictions>
-                                                        .createPower("MonkClassStepOfTheWindPower",
-                                                                     "",
-                                                                     step_of_the_wind_title_string,
-                                                                     step_of_the_wind_description_string,
-                                                                     DatabaseHelper.FeatureDefinitionPowers.PowerOathOfDevotionAuraDevotion.GuiPresentation.SpriteReference,
-                                                                     effect,
-                                                                     RuleDefinitions.ActivationTime.BonusAction,
-                                                                     2,
-                                                                     RuleDefinitions.UsesDetermination.Fixed,
-                                                                     RuleDefinitions.RechargeRate.ShortRest
-                                                                     );
-            step_of_the_wind.restrictions = new List<NewFeatureDefinitions.IRestriction>()
+            };
+
+            foreach (var p in power_tuples)
+            {
+                var effect = new EffectDescription();
+                effect.Copy(DatabaseHelper.SpellDefinitions.Haste.EffectDescription);
+                effect.SetRangeType(RuleDefinitions.RangeType.Self);
+                effect.SetRangeParameter(1);
+                effect.DurationParameter = 1;
+                effect.DurationType = RuleDefinitions.DurationType.Round;
+                effect.EffectForms.Clear();
+                effect.SetTargetType(RuleDefinitions.TargetType.Self);
+
+                var effect_form = new EffectForm();
+                effect_form.ConditionForm = new ConditionForm();
+                effect_form.FormType = EffectForm.EffectFormType.Condition;
+                effect_form.ConditionForm.Operation = ConditionForm.ConditionOperation.Add;
+                effect_form.ConditionForm.ConditionDefinition = p.condition;
+                effect.EffectForms.Add(effect_form);
+                effect_form = new EffectForm();
+                effect_form.ConditionForm = new ConditionForm();
+                effect_form.FormType = EffectForm.EffectFormType.Condition;
+                effect_form.ConditionForm.Operation = ConditionForm.ConditionOperation.Add;
+                effect_form.ConditionForm.ConditionDefinition = step_of_the_wind_condition;
+                effect.EffectForms.Add(effect_form);
+
+                var power = Helpers.GenericPowerBuilder<NewFeatureDefinitions.PowerWithRestrictions>
+                                                            .createPower("MonkClassStepOfTheWindDashPower" + p.condition.name,
+                                                                         "",
+                                                                         p.title,
+                                                                         step_of_the_wind_description_string,
+                                                                         p.sprite,
+                                                                         effect,
+                                                                         RuleDefinitions.ActivationTime.BonusAction,
+                                                                         2,
+                                                                         RuleDefinitions.UsesDetermination.Fixed,
+                                                                         RuleDefinitions.RechargeRate.ShortRest
+                                                                         );
+                power.restrictions = new List<NewFeatureDefinitions.IRestriction>()
                                             {
                                                 new NewFeatureDefinitions.NoArmorRestriction(),
                                                 new NewFeatureDefinitions.NoShieldRestriction()
                                             };
-            step_of_the_wind.linkedPower = flurry_of_blows;
+                power.linkedPower = flurry_of_blows;
+                step_of_the_wind_powers.Add(power);
+            }
+
+            step_of_the_wind = Helpers.FeatureSetBuilder.createFeatureSet("MonkClassStepOfTheWind",
+                                                          "",
+                                                          step_of_the_wind_title_string,
+                                                          step_of_the_wind_description_string,
+                                                          false,
+                                                          FeatureDefinitionFeatureSet.FeatureSetMode.Union,
+                                                          false,
+                                                          step_of_the_wind_powers.ToArray()
+                                                          );
+
         }
 
 
@@ -575,7 +600,7 @@ namespace SolastaMonkClass
             effect_form.ConditionForm = new ConditionForm();
             effect_form.FormType = EffectForm.EffectFormType.Condition;
             effect_form.ConditionForm.Operation = ConditionForm.ConditionOperation.Add;
-            effect_form.ConditionForm.ConditionDefinition = patient_defense_condition;
+            effect_form.ConditionForm.ConditionDefinition = DatabaseHelper.ConditionDefinitions.ConditionDodging;
             effect.EffectForms.Add(effect_form);
 
             patient_defense = Helpers.GenericPowerBuilder<NewFeatureDefinitions.PowerWithRestrictions>
@@ -669,7 +694,7 @@ namespace SolastaMonkClass
                                                                      "",
                                                                      flurry_of_blows_title_string,
                                                                      flurry_of_blows_description_string,
-                                                                     DatabaseHelper.FeatureDefinitionPowers.PowerReckless.GuiPresentation.SpriteReference,
+                                                                     DatabaseHelper.FeatureDefinitionPowers.PowerOathOfDevotionTurnUnholy.GuiPresentation.SpriteReference,
                                                                      effect,
                                                                      RuleDefinitions.ActivationTime.BonusAction,
                                                                      2,
@@ -1075,8 +1100,7 @@ namespace SolastaMonkClass
             effect.DurationParameter = 1;
             effect.SetRangeType(RuleDefinitions.RangeType.Self);
             effect.SetRangeParameter(1);
-            effect.DurationParameter = 1;
-            effect.DurationType = RuleDefinitions.DurationType.Round;
+            effect.DurationType = RuleDefinitions.DurationType.Instantaneous;
             effect.SetTargetType(RuleDefinitions.TargetType.Self);
             effect.EffectForms.Clear();
 
@@ -1094,7 +1118,7 @@ namespace SolastaMonkClass
                                                                  wholeness_of_body_title_string,
                                                                  wholeness_of_body_description_string,
                                                                  DatabaseHelper.FeatureDefinitionPowers.PowerTraditionShockArcanistArcaneShock.GuiPresentation.spriteReference,
-                                                                 DatabaseHelper.FeatureDefinitionPowers.PowerPaladinLayOnHands,
+                                                                 DatabaseHelper.FeatureDefinitionPowers.PowerDomainBattleHeraldOfBattle,
                                                                  effect,
                                                                  RuleDefinitions.ActivationTime.Action,
                                                                  1,
@@ -1118,10 +1142,274 @@ namespace SolastaMonkClass
             CharacterSubclassDefinition definition = new CharacterSubclassDefinitionBuilder("MonkSubclassWayOfTheOpenHand", "4c6e8abe-1983-49b7-bc3b-2572865f6c17")
                     .SetGuiPresentation(gui_presentation)
                     .AddFeatureAtLevel(open_hand_technique, 3)
-                    .AddFeatureAtLevel(wholeness_of_body, 3)
+                    .AddFeatureAtLevel(wholeness_of_body, 10)
                     .AddToDB();
 
             return definition;
+        }
+
+
+        static CharacterSubclassDefinition createWayOfThePyrokine()
+        {
+            createBlazingTechnique();
+            createBurningDevotion();
+
+            var gui_presentation = new GuiPresentationBuilder(
+                    "Subclass/&MonkSubclassWayOfThePyrokineDescription",
+                    "Subclass/&MonkSubclassWayOfThePyrokineTitle")
+                    .SetSpriteReference(DatabaseHelper.CharacterSubclassDefinitions.DomainElementalFire.GuiPresentation.SpriteReference)
+                    .Build();
+
+            CharacterSubclassDefinition definition = new CharacterSubclassDefinitionBuilder("MonkSubclassWayOfThePyrokine", "e9f29a8c-23a5-4774-8e92-4e4f23fb779a")
+                    .SetGuiPresentation(gui_presentation)
+                    .AddFeatureAtLevel(blazing_technique, 3)
+                    .AddFeatureAtLevel(burning_devotion, 10)
+                    .AddToDB();
+
+            return definition;
+        }
+
+
+        static void createBurningDevotion()
+        {
+            string burning_devotion_title_string = "Feature/&MonkSubclassWayOfThePyrokineBurningDevotionTitle";
+            string burning_devotion_description_string = "Feature/&MonkSubclassWayOfThePyrokineBurningDevotionDescription";
+
+            burning_devotion = Helpers.FeatureSetBuilder.createFeatureSet("MonkSubclassWayOfThePyrokineBurningDevotion",
+                                                                            "",
+                                                                            burning_devotion_title_string,
+                                                                            burning_devotion_description_string,
+                                                                            false,
+                                                                            FeatureDefinitionFeatureSet.FeatureSetMode.Union,
+                                                                            false,
+                                                                            DatabaseHelper.FeatureDefinitionDamageAffinitys.DamageAffinityFireResistance
+                                                                            );
+        }
+
+
+
+        static void createBlazingTechnique()
+        {
+            string blazing_technique_title_string = "Feature/&MonkSubclassWayOfThePyrokineTechniqueTitle";
+            string blazing_technique_description_string = "Feature/&MonkSubclassWayOfThePyrokineTechniqueDescription";
+
+            var blazing_technique_used_condition = Helpers.ConditionBuilder.createConditionWithInterruptions("MonkSubclassWayOfThePyrokineUsedCondition",
+                                                                                                    "",
+                                                                                                    "",
+                                                                                                    "",
+                                                                                                    null,
+                                                                                                    DatabaseHelper.ConditionDefinitions.ConditionDummy,
+                                                                                                    new RuleDefinitions.ConditionInterruption[] { RuleDefinitions.ConditionInterruption.AttacksAndDamages }
+                                                                                                    );
+            NewFeatureDefinitions.ConditionsData.no_refresh_conditions.Add(blazing_technique_used_condition);
+
+            createBlazingTechniqueBurn();
+            createBlazingTechniqueDamage();
+            createBlazingTechniqueBlind();
+
+            var open_hand_used_feature = Helpers.FeatureBuilder<NewFeatureDefinitions.ApplyConditionOnPowerUseToSelf>.createFeature("MonkSubclassWayOfThePyrokineUsedFeature",
+                                                                                                                                      "",
+                                                                                                                                      Common.common_no_title,
+                                                                                                                                      Common.common_no_title,
+                                                                                                                                      Common.common_no_icon,
+                                                                                                                                      a =>
+                                                                                                                                      {
+                                                                                                                                          a.condition = blazing_technique_used_condition;
+                                                                                                                                          a.durationType = RuleDefinitions.DurationType.Round;
+                                                                                                                                          a.durationValue = 1;
+                                                                                                                                          a.powers = new List<FeatureDefinitionPower> { blazing_technique_burn, blazing_technique_damage, blazing_technique_blind };
+
+
+                                                                                                                                      }
+                                                                                                                                      );
+
+
+            blazing_technique = Helpers.FeatureSetBuilder.createFeatureSet("MonkSubclassWayOfThePyrokineTechnique",
+                                                                             "",
+                                                                             blazing_technique_title_string,
+                                                                             blazing_technique_description_string,
+                                                                             false,
+                                                                             FeatureDefinitionFeatureSet.FeatureSetMode.Union,
+                                                                             false,
+                                                                             blazing_technique_burn,
+                                                                             blazing_technique_damage,
+                                                                             blazing_technique_blind,
+                                                                             open_hand_used_feature
+                                                                             );
+            blazing_technique_burn.restrictions.Add(new NewFeatureDefinitions.NoConditionRestriction(blazing_technique_used_condition));
+            blazing_technique_damage.restrictions.Add(new NewFeatureDefinitions.NoConditionRestriction(blazing_technique_used_condition));
+            blazing_technique_blind.restrictions.Add(new NewFeatureDefinitions.NoConditionRestriction(blazing_technique_used_condition));
+        }
+
+
+        static void createBlazingTechniqueBurn()
+        {
+            string pyrokine_burn_title_string = "Feature/&MonkSubclassWayOfThePyrokineBurnTitle";
+            string pyrokine_burn_description_string = "Feature/&MonkSubclassWayOfThePyrokineBurnDescription";
+            string use_pyrokine_burn_react_description = "Reaction/&SpendMonkSubclassWayOfThePyrokineBurnPowerReactDescription";
+            string use_pyrokine_burn_react_title = "Reaction/&CommonUsePowerReactTitle";
+
+            string burning_title_string = "Rules/&ConditionMonkSubclassWayOfThePyrokineBurnPowerTitle";
+            string burning_description_string = "Rules/&ConditionMonkSubclassWayOfThePyrokineBurnPowerDescription";
+            var condition = Helpers.CopyFeatureBuilder<ConditionDefinition>.createFeatureCopy("MonkSubclassWayOfThePyrokineBurnCondition",
+                                                                                              "",
+                                                                                              burning_title_string,
+                                                                                              burning_description_string,
+                                                                                              null,
+                                                                                              DatabaseHelper.ConditionDefinitions.ConditionAcidArrowed
+                                                                                              );
+            condition.specialDuration = false;
+            condition.SetTurnOccurence(RuleDefinitions.TurnOccurenceType.EndOfTurn);
+
+            var damage_form = new EffectForm();
+            damage_form.DamageForm = new DamageForm();
+            damage_form.FormType = EffectForm.EffectFormType.Damage;
+            damage_form.DamageForm.dieType = RuleDefinitions.DieType.D4;
+            damage_form.DamageForm.diceNumber = 1;
+            damage_form.DamageForm.damageType = Helpers.DamageTypes.Fire;
+            condition.recurrentEffectForms.Clear();
+            condition.recurrentEffectForms.Add(damage_form);
+
+            var effect = new EffectDescription();
+            effect.Copy(DatabaseHelper.FeatureDefinitionPowers.PowerDomainBattleDecisiveStrike.EffectDescription);
+            effect.DurationParameter = 1;
+            effect.DurationType = RuleDefinitions.DurationType.UntilAnyRest;
+            effect.SetSavingThrowDifficultyAbility(Helpers.Stats.Wisdom);
+            effect.SavingThrowAbility = Helpers.Stats.Dexterity;
+            effect.hasSavingThrow = true;
+            effect.SetDifficultyClassComputation(RuleDefinitions.EffectDifficultyClassComputation.AbilityScoreAndProficiency);
+            effect.EffectForms.Clear();
+
+            var effect_form = new EffectForm();
+            effect_form.ConditionForm = new ConditionForm();
+            effect_form.FormType = EffectForm.EffectFormType.Condition;
+            effect_form.ConditionForm.Operation = ConditionForm.ConditionOperation.Add;
+            effect_form.ConditionForm.ConditionDefinition = condition;
+            effect_form.saveOccurence = RuleDefinitions.TurnOccurenceType.StartOfTurn;
+            effect_form.hasSavingThrow = true;
+            effect.EffectForms.Add(effect_form);
+
+            var power = Helpers.GenericPowerBuilder<NewFeatureDefinitions.PowerWithRestrictions>
+                                                        .createPower("MonkSubclassWayOfThePyrokineBurn",
+                                                                     "",
+                                                                     pyrokine_burn_title_string,
+                                                                     pyrokine_burn_description_string,
+                                                                     flurry_of_blows.GuiPresentation.SpriteReference,
+                                                                     effect,
+                                                                     RuleDefinitions.ActivationTime.OnAttackHit,
+                                                                     2,
+                                                                     RuleDefinitions.UsesDetermination.Fixed,
+                                                                     RuleDefinitions.RechargeRate.AtWill
+                                                                     );
+            power.restrictions = new List<NewFeatureDefinitions.IRestriction>()
+                                            {
+                                                new NewFeatureDefinitions.HasAtLeastOneConditionFromListRestriction(flurry_of_blows_condition)
+                                            };
+            power.checkReaction = true;
+
+            blazing_technique_burn = power;
+
+            Helpers.StringProcessing.addPowerReactStrings(blazing_technique_burn, pyrokine_burn_title_string, use_pyrokine_burn_react_description,
+                                                        use_pyrokine_burn_react_title, use_pyrokine_burn_react_description, "SpendPower");
+        }
+
+
+        static void createBlazingTechniqueBlind()
+        {
+            string pyrokine_blind_title_string = "Feature/&MonkSubclassWayOfThePyrokineBlindTitle";
+            string pyrokine_blind_description_string = "Feature/&MonkSubclassWayOfThePyrokineBlindDescription";
+            string use_pyrokine_blind_react_description = "Reaction/&SpendMonkSubclassWayOfThePyrokineBlindPowerReactDescription";
+            string use_pyrokine_blind_react_title = "Reaction/&CommonUsePowerReactTitle";
+
+            var effect = new EffectDescription();
+            effect.Copy(DatabaseHelper.FeatureDefinitionPowers.PowerDomainBattleDecisiveStrike.EffectDescription);
+            effect.DurationParameter = 1;
+            effect.DurationType = RuleDefinitions.DurationType.Instantaneous;
+            effect.SetSavingThrowDifficultyAbility(Helpers.Stats.Wisdom);
+            effect.SavingThrowAbility = Helpers.Stats.Wisdom;
+            effect.hasSavingThrow = true;
+            effect.SetDifficultyClassComputation(RuleDefinitions.EffectDifficultyClassComputation.AbilityScoreAndProficiency);
+            effect.EffectForms.Clear();
+
+            var effect_form = new EffectForm();
+            effect_form.ConditionForm = new ConditionForm();
+            effect_form.FormType = EffectForm.EffectFormType.Condition;
+            effect_form.ConditionForm.Operation = ConditionForm.ConditionOperation.Add;
+            effect_form.ConditionForm.ConditionDefinition = DatabaseHelper.ConditionDefinitions.ConditionBlinded;
+            effect.EffectForms.Add(effect_form);
+
+            var power = Helpers.GenericPowerBuilder<NewFeatureDefinitions.PowerWithRestrictions>
+                                                        .createPower("MonkSubclassWayOfThePyrokineBlind",
+                                                                     "",
+                                                                     pyrokine_blind_title_string,
+                                                                     pyrokine_blind_description_string,
+                                                                     flurry_of_blows.GuiPresentation.SpriteReference,
+                                                                     effect,
+                                                                     RuleDefinitions.ActivationTime.OnAttackHit,
+                                                                     2,
+                                                                     RuleDefinitions.UsesDetermination.Fixed,
+                                                                     RuleDefinitions.RechargeRate.AtWill
+                                                                     );
+            power.restrictions = new List<NewFeatureDefinitions.IRestriction>()
+                                            {
+                                                new NewFeatureDefinitions.HasAtLeastOneConditionFromListRestriction(flurry_of_blows_condition)
+                                            };
+            power.checkReaction = true;
+
+            blazing_technique_blind = power;
+
+            Helpers.StringProcessing.addPowerReactStrings(blazing_technique_blind, pyrokine_blind_title_string, use_pyrokine_blind_react_description,
+                                                        use_pyrokine_blind_react_title, use_pyrokine_blind_react_description, "SpendPower");
+        }
+
+
+        static void createBlazingTechniqueDamage()
+        {
+            string pyrokine_damage_title_string = "Feature/&MonkSubclassWayOfThePyrokineDamageTitle";
+            string pyrokine_damage_description_string = "Feature/&MonkSubclassWayOfThePyrokineDamageDescription";
+            string use_pyrokine_damage_react_description = "Reaction/&SpendMonkSubclassWayOfThePyrokineDamagePowerReactDescription";
+            string use_pyrokine_damage_react_title = "Reaction/&CommonUsePowerReactTitle";
+
+            var effect = new EffectDescription();
+            effect.Copy(DatabaseHelper.FeatureDefinitionPowers.PowerDomainBattleDecisiveStrike.EffectDescription);
+            effect.DurationParameter = 1;
+            effect.DurationType = RuleDefinitions.DurationType.Round;
+            effect.SetSavingThrowDifficultyAbility(Helpers.Stats.Wisdom);
+            effect.SavingThrowAbility = Helpers.Stats.Wisdom;
+            effect.hasSavingThrow = true;
+            effect.SetDifficultyClassComputation(RuleDefinitions.EffectDifficultyClassComputation.AbilityScoreAndProficiency);
+            effect.EffectForms.Clear();
+
+            var effect_form = new EffectForm();
+            effect_form.DamageForm = new DamageForm();
+            effect_form.FormType = EffectForm.EffectFormType.Damage;
+            effect_form.DamageForm.dieType = RuleDefinitions.DieType.D4;
+            effect_form.DamageForm.diceNumber = 1;
+            effect_form.DamageForm.damageType = Helpers.DamageTypes.Fire;
+            effect.EffectForms.Add(effect_form);
+
+            var power = Helpers.GenericPowerBuilder<NewFeatureDefinitions.PowerWithRestrictions>
+                                                        .createPower("MonkSubclassWayOfThePyrokineDamage",
+                                                                     "",
+                                                                     pyrokine_damage_title_string,
+                                                                     pyrokine_damage_description_string,
+                                                                     flurry_of_blows.GuiPresentation.SpriteReference,
+                                                                     effect,
+                                                                     RuleDefinitions.ActivationTime.OnAttackHit,
+                                                                     2,
+                                                                     RuleDefinitions.UsesDetermination.Fixed,
+                                                                     RuleDefinitions.RechargeRate.AtWill
+                                                                     );
+            power.restrictions = new List<NewFeatureDefinitions.IRestriction>()
+                                            {
+                                                new NewFeatureDefinitions.HasAtLeastOneConditionFromListRestriction(flurry_of_blows_condition)
+                                            };
+            power.checkReaction = true;
+
+            blazing_technique_damage = power;
+
+            Helpers.StringProcessing.addPowerReactStrings(blazing_technique_damage, pyrokine_damage_title_string, use_pyrokine_damage_react_description,
+                                                        use_pyrokine_damage_react_title, use_pyrokine_damage_react_description, "SpendPower");
         }
 
 
@@ -1135,6 +1423,7 @@ namespace SolastaMonkClass
                                          );
 
             MonkFeatureDefinitionSubclassChoice.Subclasses.Add(createWayOfTheOpenHand().Name);
+            MonkFeatureDefinitionSubclassChoice.Subclasses.Add(createWayOfThePyrokine().Name);
         }
 
         private static FeatureDefinitionSubclassChoice MonkFeatureDefinitionSubclassChoice;
