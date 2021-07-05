@@ -115,3 +115,6 @@ MonkSubclassWayOfThePyrokineBlind	23566a89-0b8e-4c8b-8e2b-7e3a7d3590a6
 MonkSubclassWayOfThePyrokineUsedFeature	b6722328-ec22-48fc-af36-9a074ea705bb
 MonkSubclassWayOfThePyrokineTechnique	d66982c7-831a-451b-9618-cfb032b22d4a
 MonkSubclassWayOfThePyrokineBurningDevotion	0fffbd75-8828-474f-97f0-436d4080528f
+MonkSubclassWayOfIronAllowUseMonkFeaturesInArmorFeature	7bb4088a-86e5-47f3-8dda-39c4f8b833d5
+MonkSubclassWayOfIronRoilingStormOfIron	54d25601-fa72-4686-9837-d115a219e525
+MonkSubclassWayOfIronShiftingBlades	fbeb4bfb-2272-4d9b-8308-b9c31cf19585

@@ -30,11 +30,22 @@ namespace SolastaMonkClass
             Helpers.WeaponProficiencies.Spear,
             Helpers.WeaponProficiencies.Unarmed
         };
+        static public List<string> way_of_iron_weapons = new List<string>
+        {
+            Helpers.WeaponProficiencies.BattleAxe,
+            Helpers.WeaponProficiencies.Rapier,
+            Helpers.WeaponProficiencies.MorningStar,
+            Helpers.WeaponProficiencies.Warhammer,
+            Helpers.WeaponProficiencies.Scimitar
+        };
+
         static public CharacterClassDefinition monk_class;
         static public NewFeatureDefinitions.ArmorClassStatBonus unarmored_defense;
         static public FeatureDefinitionFeatureSet martial_arts;
-        static public NewFeatureDefinitions.MovementBonusBasedOnEquipment unarmored_movement;
-        static public Dictionary<int, NewFeatureDefinitions.MovementBonusBasedOnEquipment> unarmored_movement_improvements = new Dictionary<int, NewFeatureDefinitions.MovementBonusBasedOnEquipment>();
+        static public FeatureDefinition way_of_iron_allow_using_monk_features_in_armor;
+        static public NewFeatureDefinitions.IRestriction no_armor_restriction;
+        static public NewFeatureDefinitions.MovementBonusWithRestrictions unarmored_movement;
+        static public Dictionary<int, NewFeatureDefinitions.MovementBonusWithRestrictions> unarmored_movement_improvements = new Dictionary<int, NewFeatureDefinitions.MovementBonusWithRestrictions>();
         static List<int> unarmored_movement_improvement_levels = new List<int> { 6, 10, 14, 18 };
         static public NewFeatureDefinitions.IncreaseNumberOfPowerUsesPerClassLevel ki;
         static public ConditionDefinition flurry_of_blows_condition;
@@ -62,7 +73,11 @@ namespace SolastaMonkClass
         static public NewFeatureDefinitions.PowerWithRestrictions blazing_technique_damage;
         static public NewFeatureDefinitions.PowerWithRestrictions blazing_technique_blind;
         static public FeatureDefinitionFeatureSet burning_devotion;
-        //
+        //Way of Iron
+        static public FeatureDefinitionFeatureSet roiling_storm_of_iron;
+        static public FeatureDefinitionPower test_of_skill;
+        static public NewFeatureDefinitions.AddAttackTagForSpecificWeaponType shifting_blades;
+
 
 
         protected MonkClassBuilder(string name, string guid) : base(name, guid)
@@ -231,10 +246,9 @@ namespace SolastaMonkClass
                                                                                                                                               a =>
                                                                                                                                               {
                                                                                                                                                   a.condition = condtion;
-                                                                                                                                                  a.restrictions = new List<NewFeatureDefinitions.IRestriction>
+                                                                                                                                                  a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
                                                                                                                                                   {
-                                                                                                                                                      new NewFeatureDefinitions.NoArmorRestriction(),
-                                                                                                                                                      new NewFeatureDefinitions.NoShieldRestriction()
+                                                                                                                                                      no_armor_restriction
                                                                                                                                                   };
                                                                                                                                               }
                                                                                                                                               );
@@ -538,10 +552,9 @@ namespace SolastaMonkClass
                                                                          RuleDefinitions.RechargeRate.ShortRest
                                                                          );
                 power.restrictions = new List<NewFeatureDefinitions.IRestriction>()
-                                            {
-                                                new NewFeatureDefinitions.NoArmorRestriction(),
-                                                new NewFeatureDefinitions.NoShieldRestriction()
-                                            };
+                                    {
+                                        no_armor_restriction
+                                    };
                 power.linkedPower = flurry_of_blows;
                 step_of_the_wind_powers.Add(power);
             }
@@ -619,8 +632,7 @@ namespace SolastaMonkClass
                                                                      );
             patient_defense.restrictions = new List<NewFeatureDefinitions.IRestriction>()
                                             {
-                                                new NewFeatureDefinitions.NoArmorRestriction(),
-                                                new NewFeatureDefinitions.NoShieldRestriction()
+                                                no_armor_restriction
                                             };
             patient_defense.linkedPower = flurry_of_blows;
         }
@@ -656,8 +668,10 @@ namespace SolastaMonkClass
                                                                                                                     a =>
                                                                                                                     {
                                                                                                                         a.allowedWeaponTypes = monk_weapons;
-                                                                                                                        a.allowArmor = false;
-                                                                                                                        a.allowShield = false;
+                                                                                                                        a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
+                                                                                                                        {
+                                                                                                                            no_armor_restriction
+                                                                                                                        };
                                                                                                                         a.clearAllAttacks = true;
                                                                                                                         a.actionType = ActionDefinitions.ActionType.Main;
                                                                                                                     }
@@ -705,8 +719,7 @@ namespace SolastaMonkClass
                                                                      );
             flurry_of_blows.restrictions = new List<NewFeatureDefinitions.IRestriction>()
                                             {
-                                                new NewFeatureDefinitions.NoArmorRestriction(),
-                                                new NewFeatureDefinitions.NoShieldRestriction(),
+                                                no_armor_restriction,
                                                 new NewFeatureDefinitions.UsedAllMainAttacksRestriction(),
                                                 new NewFeatureDefinitions.FreeOffHandRestriciton()
                                             };
@@ -728,15 +741,17 @@ namespace SolastaMonkClass
                                                                                                             null,
                                                                                                             DatabaseHelper.FeatureDefinitionMovementAffinitys.MovementAffinityLongstrider
                                                                                                             );
-            unarmored_movement = Helpers.FeatureBuilder<NewFeatureDefinitions.MovementBonusBasedOnEquipment>.createFeature("MonkClassUnarmoredMovementFeature",
+            unarmored_movement = Helpers.FeatureBuilder<NewFeatureDefinitions.MovementBonusWithRestrictions>.createFeature("MonkClassUnarmoredMovementFeature",
                                                                                                                          "",
                                                                                                                          unarmored_movement_title_string,
                                                                                                                          unarmored_movement_description_string,
                                                                                                                          null,
                                                                                                                          a =>
                                                                                                                          {
-                                                                                                                             a.allowArmor = false;
-                                                                                                                             a.allowShield = false;
+                                                                                                                             a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
+                                                                                                                             {
+                                                                                                                                 no_armor_restriction
+                                                                                                                             };
                                                                                                                              a.modifiers = new List<FeatureDefinition> { unarmored_movement_feature };
                                                                                                                          }
                                                                                                                          );
@@ -757,7 +772,7 @@ namespace SolastaMonkClass
             {
                 var lvl = unarmored_movement_improvement_levels[i];
                 int bonus_feet = 15 + i * 5;
-                unarmored_movement_improvements[lvl] = Helpers.FeatureBuilder<NewFeatureDefinitions.MovementBonusBasedOnEquipment>.createFeature($"MonkClassUnarmoredMovementImprovementFeature{lvl}",
+                unarmored_movement_improvements[lvl] = Helpers.FeatureBuilder<NewFeatureDefinitions.MovementBonusWithRestrictions>.createFeature($"MonkClassUnarmoredMovementImprovementFeature{lvl}",
                                                                                                              "",
                                                                                                              unarmored_movement_improvement_title_string,
                                                                                                              Helpers.StringProcessing
@@ -769,8 +784,10 @@ namespace SolastaMonkClass
                                                                                                              null,
                                                                                                              a =>
                                                                                                              {
-                                                                                                                 a.allowArmor = false;
-                                                                                                                 a.allowShield = false;
+                                                                                                                 a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
+                                                                                                                 {
+                                                                                                                     no_armor_restriction
+                                                                                                                 };
                                                                                                                  a.modifiers = new List<FeatureDefinition> { unarmored_movement_improvement_feature };
                                                                                                              }
                                                                                                              );
@@ -799,6 +816,19 @@ namespace SolastaMonkClass
                                                                                                                     };
                                                                                                                 }
                                                                                                                 );
+
+            way_of_iron_allow_using_monk_features_in_armor = Helpers.OnlyDescriptionFeatureBuilder.createOnlyDescriptionFeature("MonkSubclassWayOfIronAllowUseMonkFeaturesInArmorFeature",
+                                                                                                                                "",
+                                                                                                                                Common.common_no_title,
+                                                                                                                                Common.common_no_title
+                                                                                                                                );
+            no_armor_restriction = new NewFeatureDefinitions.AndRestriction(new NewFeatureDefinitions.OrRestriction(new NewFeatureDefinitions.NoArmorRestriction(),
+                                                                                                                    new NewFeatureDefinitions.NoShieldRestriction()
+                                                                                                                    ),
+                                                                            new NewFeatureDefinitions.HasFeatureRestricition(way_of_iron_allow_using_monk_features_in_armor)
+                                                                        );
+
+
         }
 
 
@@ -815,8 +845,10 @@ namespace SolastaMonkClass
                                                                                                                                         a =>
                                                                                                                                         {
                                                                                                                                             a.weaponTypes = monk_weapons;
-                                                                                                                                            a.allowArmor = false;
-                                                                                                                                            a.allowShield = false;
+                                                                                                                                            a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
+                                                                                                                                            {
+                                                                                                                                                no_armor_restriction
+                                                                                                                                            };
                                                                                                                                         }
                                                                                                                                         );
 
@@ -828,8 +860,10 @@ namespace SolastaMonkClass
                                                                                                                                     a =>
                                                                                                                                     {
                                                                                                                                         a.weaponTypes = monk_weapons;
-                                                                                                                                        a.allowArmor = false;
-                                                                                                                                        a.allowShield = false;
+                                                                                                                                        a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
+                                                                                                                                        {
+                                                                                                                                            no_armor_restriction
+                                                                                                                                        };
                                                                                                                                         a.characterClass = monk_class;
                                                                                                                                         a.levelDamageList = new List<(int, int, RuleDefinitions.DieType)>
                                                                                                                                         {
@@ -849,8 +883,10 @@ namespace SolastaMonkClass
                                                                                                                                 a =>
                                                                                                                                 {
                                                                                                                                     a.allowedWeaponTypes = monk_weapons;
-                                                                                                                                    a.allowArmor = false;
-                                                                                                                                    a.allowShield = false;
+                                                                                                                                    a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
+                                                                                                                                    {
+                                                                                                                                        no_armor_restriction
+                                                                                                                                    };
                                                                                                                                     a.clearAllAttacks = false;
                                                                                                                                     a.actionType = ActionDefinitions.ActionType.Bonus;
                                                                                                                                 }
@@ -1150,7 +1186,7 @@ namespace SolastaMonkClass
             CharacterSubclassDefinition definition = new CharacterSubclassDefinitionBuilder("MonkSubclassWayOfTheOpenHand", "4c6e8abe-1983-49b7-bc3b-2572865f6c17")
                     .SetGuiPresentation(gui_presentation)
                     .AddFeatureAtLevel(open_hand_technique, 3)
-                    .AddFeatureAtLevel(wholeness_of_body, 10)
+                    .AddFeatureAtLevel(wholeness_of_body, 6)
                     .AddToDB();
 
             return definition;
@@ -1171,7 +1207,7 @@ namespace SolastaMonkClass
             CharacterSubclassDefinition definition = new CharacterSubclassDefinitionBuilder("MonkSubclassWayOfThePyrokine", "e9f29a8c-23a5-4774-8e92-4e4f23fb779a")
                     .SetGuiPresentation(gui_presentation)
                     .AddFeatureAtLevel(blazing_technique, 3)
-                    .AddFeatureAtLevel(burning_devotion, 10)
+                    .AddFeatureAtLevel(burning_devotion, 6)
                     .AddToDB();
 
             return definition;
@@ -1425,6 +1461,67 @@ namespace SolastaMonkClass
                                                         use_pyrokine_damage_react_title, use_pyrokine_damage_react_description, "SpendPower");
         }
 
+        static void createRoilingStormOfIron()
+        {
+            string roiling_storm_of_iron_title_string = "Feature/&MonkSubclassWayOfIronRoilingStormOfIronTitle";
+            string roiling_storm_of_iron_description_string = "Feature/&MonkSubclassWayOfIronRoilingStormOfIronDescription";
+            roiling_storm_of_iron = Helpers.FeatureSetBuilder.createFeatureSet("MonkSubclassWayOfIronRoilingStormOfIron",
+                                                                               "",
+                                                                               roiling_storm_of_iron_title_string,
+                                                                               roiling_storm_of_iron_description_string,
+                                                                               false,
+                                                                               FeatureDefinitionFeatureSet.FeatureSetMode.Union,
+                                                                               false,
+                                                                               way_of_iron_allow_using_monk_features_in_armor,
+                                                                               DatabaseHelper.FeatureDefinitionProficiencys.ProficiencyRangerArmor,
+                                                                               DatabaseHelper.FeatureDefinitionProficiencys.ProficiencyRangerWeapon
+                                                                               );
+        }
+
+
+        static void createShiftingBlades()
+        {
+            string shifting_blades_title_string = "Feature/&MonkSubclassWayOfIronShiftingBladesTitle";
+            string shifting_blades_description_string = "Feature/&MonkSubclassWayOfIronShiftingBladesDescription";
+
+            shifting_blades = Helpers.FeatureBuilder<NewFeatureDefinitions.AddAttackTagForSpecificWeaponType>.createFeature("MonkSubclassWayOfIronShiftingBlades",
+                                                                                                                                "",
+                                                                                                                                shifting_blades_title_string,
+                                                                                                                                shifting_blades_description_string,
+                                                                                                                                Common.common_no_icon,
+                                                                                                                                a =>
+                                                                                                                                {
+                                                                                                                                    a.weaponTypes = new List<string>();
+                                                                                                                                    a.weaponTypes.AddRange(monk_weapons.Where(w => w != Helpers.WeaponProficiencies.Unarmed));
+                                                                                                                                    a.weaponTypes.AddRange(way_of_iron_weapons);
+                                                                                                                                    a.tag = "Magical";
+                                                                                                                                }
+                                                                                                                                );
+        }
+
+
+        static CharacterSubclassDefinition createWayOfIron()
+        {
+            createRoilingStormOfIron();
+            //createTestOfSkill();
+            createShiftingBlades();
+
+            var gui_presentation = new GuiPresentationBuilder(
+                    "Subclass/&MonkSubclassWayOfIronDescription",
+                    "Subclass/&MonkSubclassWayOfIronTitle")
+                    .SetSpriteReference(DatabaseHelper.CharacterSubclassDefinitions.DomainBattle.GuiPresentation.SpriteReference)
+                    .Build();
+
+            CharacterSubclassDefinition definition = new CharacterSubclassDefinitionBuilder("MonkSubclassWayOfIron", "c4e735e3-0a9e-4586-bd86-0137ce61ff63")
+                    .SetGuiPresentation(gui_presentation)
+                    .AddFeatureAtLevel(roiling_storm_of_iron, 3)
+                    //.AddFeatureAtLevel(test_of_skill, 3)
+                    .AddFeatureAtLevel(shifting_blades, 6)
+                    .AddToDB();
+
+            return definition;
+        }
+
 
         public static void BuildAndAddClassToDB()
         {
@@ -1437,6 +1534,7 @@ namespace SolastaMonkClass
 
             MonkFeatureDefinitionSubclassChoice.Subclasses.Add(createWayOfTheOpenHand().Name);
             MonkFeatureDefinitionSubclassChoice.Subclasses.Add(createWayOfThePyrokine().Name);
+            MonkFeatureDefinitionSubclassChoice.Subclasses.Add(createWayOfIron().Name);
         }
 
         private static FeatureDefinitionSubclassChoice MonkFeatureDefinitionSubclassChoice;
