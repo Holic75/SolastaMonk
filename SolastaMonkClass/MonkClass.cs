@@ -677,6 +677,7 @@ namespace SolastaMonkClass
                                                                                                                     }
                                                                                                                     );
 
+
             flurry_of_blows_condition = Helpers.ConditionBuilder.createConditionWithInterruptions("MonkClassFlurryOfBlowsCondition",
                                                                                                   "",
                                                                                                   flurry_of_blows_title_string,
@@ -852,7 +853,7 @@ namespace SolastaMonkClass
                                                                                                                                         }
                                                                                                                                         );
 
-            var damage_dice = Helpers.FeatureBuilder<NewFeatureDefinitions.OvewriteDamageOnSpecificWeaponTypesBasedOnClassLevel>.createFeature("MonkClassMartialArtsDamageDice",
+            var damage_dice = Helpers.FeatureBuilder<NewFeatureDefinitions.OverwriteDamageOnSpecificWeaponTypesBasedOnClassLevel>.createFeature("MonkClassMartialArtsDamageDice",
                                                                                                                                     "",
                                                                                                                                     Common.common_no_title,
                                                                                                                                     Common.common_no_title,
@@ -891,6 +892,7 @@ namespace SolastaMonkClass
                                                                                                                                     a.actionType = ActionDefinitions.ActionType.Bonus;
                                                                                                                                 }
                                                                                                                                 );
+
             martial_arts = Helpers.FeatureSetBuilder.createFeatureSet("MonkClassMartialArts",
                                                                       "",
                                                                       martial_arts_title_string,
@@ -1465,6 +1467,63 @@ namespace SolastaMonkClass
         {
             string roiling_storm_of_iron_title_string = "Feature/&MonkSubclassWayOfIronRoilingStormOfIronTitle";
             string roiling_storm_of_iron_description_string = "Feature/&MonkSubclassWayOfIronRoilingStormOfIronDescription";
+
+
+            var dex_on_weapons = Helpers.FeatureBuilder<NewFeatureDefinitions.canUseDexterityWithSpecifiedWeaponTypes>.createFeature("MonkSubclassWayOfIronMartialArtsDexForWeapons",
+                                                                                                                            "",
+                                                                                                                            Common.common_no_title,
+                                                                                                                            Common.common_no_title,
+                                                                                                                            null,
+                                                                                                                            a =>
+                                                                                                                            {
+                                                                                                                                a.weaponTypes = way_of_iron_weapons;
+                                                                                                                                a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
+                                                                                                                                {
+                                                                                                                                   new NewFeatureDefinitions.HasFeatureRestricition(way_of_iron_allow_using_monk_features_in_armor)
+                                                                                                                                };
+                                                                                                                            }
+                                                                                                                            );
+
+            var damage_dice = Helpers.FeatureBuilder<NewFeatureDefinitions.OverwriteDamageOnSpecificWeaponTypesBasedOnClassLevel>.createFeature("MonkSubclassWayOfIronMartialArtsDamageDice",
+                                                                                                                                    "",
+                                                                                                                                    Common.common_no_title,
+                                                                                                                                    Common.common_no_title,
+                                                                                                                                    null,
+                                                                                                                                    a =>
+                                                                                                                                    {
+                                                                                                                                        a.weaponTypes = way_of_iron_weapons;
+                                                                                                                                        a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
+                                                                                                                                        {
+                                                                                                                                           new NewFeatureDefinitions.HasFeatureRestricition(way_of_iron_allow_using_monk_features_in_armor)
+                                                                                                                                        };
+                                                                                                                                        a.characterClass = monk_class;
+                                                                                                                                        a.levelDamageList = new List<(int, int, RuleDefinitions.DieType)>
+                                                                                                                                        {
+                                                                                                                                            (4, 1, RuleDefinitions.DieType.D4),
+                                                                                                                                            (10, 1, RuleDefinitions.DieType.D6),
+                                                                                                                                            (16, 1, RuleDefinitions.DieType.D8),
+                                                                                                                                            (20, 1, RuleDefinitions.DieType.D10)
+                                                                                                                                        };
+                                                                                                                                    }
+                                                                                                                                    );
+
+            var bonus_unarmed_attack = Helpers.FeatureBuilder<NewFeatureDefinitions.ExtraUnarmedAttack>.createFeature("MonkSubclassWayOfIronMartialArtsBonusUnarmedAttack",
+                                                                                                                        "",
+                                                                                                                        Common.common_no_title,
+                                                                                                                        Common.common_no_title,
+                                                                                                                        null,
+                                                                                                                        a =>
+                                                                                                                        {
+                                                                                                                            a.allowedWeaponTypes = way_of_iron_weapons;
+                                                                                                                            a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
+                                                                                                                            {
+                                                                                                                                new NewFeatureDefinitions.HasFeatureRestricition(way_of_iron_allow_using_monk_features_in_armor)
+                                                                                                                            };
+                                                                                                                            a.clearAllAttacks = false;
+                                                                                                                            a.actionType = ActionDefinitions.ActionType.Bonus;
+                                                                                                                        }
+                                                                                                                        );
+
             roiling_storm_of_iron = Helpers.FeatureSetBuilder.createFeatureSet("MonkSubclassWayOfIronRoilingStormOfIron",
                                                                                "",
                                                                                roiling_storm_of_iron_title_string,
@@ -1474,8 +1533,31 @@ namespace SolastaMonkClass
                                                                                false,
                                                                                way_of_iron_allow_using_monk_features_in_armor,
                                                                                DatabaseHelper.FeatureDefinitionProficiencys.ProficiencyRangerArmor,
-                                                                               DatabaseHelper.FeatureDefinitionProficiencys.ProficiencyRangerWeapon
+                                                                               DatabaseHelper.FeatureDefinitionProficiencys.ProficiencyRangerWeapon,
+                                                                               dex_on_weapons,
+                                                                               damage_dice,
+                                                                               bonus_unarmed_attack
                                                                                );
+
+            var flurry_unarmed_attack_way_of_iron = Helpers.FeatureBuilder<NewFeatureDefinitions.ExtraUnarmedAttack>.createFeature("MonkSubclassWayOfIronFlurryOfBlowsUnarmedAttack",
+                                                                                                                "",
+                                                                                                                Common.common_no_title,
+                                                                                                                Common.common_no_title,
+                                                                                                                null,
+                                                                                                                a =>
+                                                                                                                {
+                                                                                                                    a.allowedWeaponTypes = way_of_iron_weapons;
+                                                                                                                    a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
+                                                                                                                    {
+                                                                                                                        new NewFeatureDefinitions.HasFeatureRestricition(way_of_iron_allow_using_monk_features_in_armor)
+                                                                                                                    };
+                                                                                                                    a.clearAllAttacks = true;
+                                                                                                                    a.actionType = ActionDefinitions.ActionType.Main;
+                                                                                                                }
+                                                                                                                );
+
+            flurry_of_blows_condition.features.Add(flurry_unarmed_attack_way_of_iron);
+
         }
 
 
@@ -1500,10 +1582,87 @@ namespace SolastaMonkClass
         }
 
 
+        static void createTestOfSkill()
+        {
+            string test_of_skills_title_string = "Feature/&MonkSubclassWayOfIronTestOfSkillTitle";
+            string test_of_skills_description_string = "Feature/&MonkSubclassWayOfIronTestOfSkillDescription";
+
+            var condition = Helpers.ConditionBuilder.createCondition("MonkSubclassWayOfIronTestOfSkillCondition",
+                                                                    "",
+                                                                    test_of_skills_title_string,
+                                                                    test_of_skills_description_string,
+                                                                    null,
+                                                                    DatabaseHelper.ConditionDefinitions.ConditionDazzled);
+
+            var disadvantage_against_non_caster_feature = Helpers.FeatureBuilder<NewFeatureDefinitions.AttackDisadvantageAgainstNonCaster>
+                                                                            .createFeature("MonkSubclassWayOfIronTestOfSkilllAttackDisadvantage",
+                                                                                           "",
+                                                                                           Common.common_no_title,
+                                                                                           Common.common_no_title,
+                                                                                           Common.common_no_icon,
+                                                                                           a =>
+                                                                                           {
+                                                                                               a.condition = condition;
+                                                                                           }
+                                                                                           );
+
+            var remove_condition_if_affected_by_non_caster_feature = Helpers.FeatureBuilder<NewFeatureDefinitions.TargetRemoveConditionIfAffectedByHostileNonCaster>
+                                                                .createFeature("MonkSubclassWayOfIronTestOfSkilllConditionWatcher",
+                                                                               "",
+                                                                               Common.common_no_title,
+                                                                               Common.common_no_title,
+                                                                               Common.common_no_icon,
+                                                                               a =>
+                                                                               {
+                                                                                   a.condition = condition;
+                                                                               }
+                                                                               );
+            condition.features.Add(disadvantage_against_non_caster_feature);
+            condition.features.Add(remove_condition_if_affected_by_non_caster_feature);
+
+
+            var effect = new EffectDescription();
+            effect.Copy(DatabaseHelper.SpellDefinitions.Dazzle.EffectDescription);
+            effect.DurationParameter = 1;
+            effect.DurationType = RuleDefinitions.DurationType.Minute;
+            effect.SetSavingThrowDifficultyAbility(Helpers.Stats.Wisdom);
+            effect.SavingThrowAbility = Helpers.Stats.Wisdom;
+            effect.hasSavingThrow = true;
+            effect.SetDifficultyClassComputation(RuleDefinitions.EffectDifficultyClassComputation.AbilityScoreAndProficiency);
+            effect.rangeParameter = 6;
+            effect.SetRangeType(RuleDefinitions.RangeType.Distance);
+            effect.EffectForms.Clear();
+
+            var effect_form = new EffectForm();
+            effect_form.ConditionForm = new ConditionForm();
+            effect_form.FormType = EffectForm.EffectFormType.Condition;
+            effect_form.ConditionForm.Operation = ConditionForm.ConditionOperation.Add;
+            effect_form.ConditionForm.ConditionDefinition = condition;
+            effect_form.hasSavingThrow = true;
+            effect_form.SavingThrowAffinity = RuleDefinitions.EffectSavingThrowType.Negates;
+            effect.EffectForms.Add(effect_form);
+            effect.SetEndOfEffect(RuleDefinitions.TurnOccurenceType.EndOfTurn);
+
+            var power = Helpers.GenericPowerBuilder<NewFeatureDefinitions.PowerWithRestrictions>
+                                                        .createPower("MonkSubclassWayOfIronTestOfSkillPower",
+                                                                     "",
+                                                                     test_of_skills_title_string,
+                                                                     test_of_skills_description_string,
+                                                                     DatabaseHelper.FeatureDefinitionPowers.PowerFighterActionSurge.GuiPresentation.SpriteReference,
+                                                                     effect,
+                                                                     RuleDefinitions.ActivationTime.NoCost,
+                                                                     1,
+                                                                     RuleDefinitions.UsesDetermination.Fixed,
+                                                                     RuleDefinitions.RechargeRate.OneMinute
+                                                                     );
+            test_of_skill = power;
+        }
+
+
         static CharacterSubclassDefinition createWayOfIron()
         {
             createRoilingStormOfIron();
-            //createTestOfSkill();
+            createTestOfSkill();
             createShiftingBlades();
 
             var gui_presentation = new GuiPresentationBuilder(
@@ -1515,7 +1674,7 @@ namespace SolastaMonkClass
             CharacterSubclassDefinition definition = new CharacterSubclassDefinitionBuilder("MonkSubclassWayOfIron", "c4e735e3-0a9e-4586-bd86-0137ce61ff63")
                     .SetGuiPresentation(gui_presentation)
                     .AddFeatureAtLevel(roiling_storm_of_iron, 3)
-                    //.AddFeatureAtLevel(test_of_skill, 3)
+                    .AddFeatureAtLevel(test_of_skill, 3)
                     .AddFeatureAtLevel(shifting_blades, 6)
                     .AddToDB();
 
