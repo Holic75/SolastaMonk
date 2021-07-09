@@ -351,12 +351,15 @@ namespace SolastaMonkClass
             effect.SavingThrowAbility = Helpers.Stats.Constitution;
             effect.SetDifficultyClassComputation(RuleDefinitions.EffectDifficultyClassComputation.AbilityScoreAndProficiency);
             effect.EffectForms.Clear();
+            effect.SetEndOfEffect(RuleDefinitions.TurnOccurenceType.EndOfTurn);
 
             var effect_form = new EffectForm();
             effect_form.ConditionForm = new ConditionForm();
             effect_form.FormType = EffectForm.EffectFormType.Condition;
             effect_form.ConditionForm.Operation = ConditionForm.ConditionOperation.Add;
             effect_form.ConditionForm.ConditionDefinition = DatabaseHelper.ConditionDefinitions.ConditionStunned;
+            effect_form.hasSavingThrow = true;
+            effect_form.SavingThrowAffinity = RuleDefinitions.EffectSavingThrowType.Negates;
             effect.EffectForms.Add(effect_form);
             effect.SetEndOfEffect(RuleDefinitions.TurnOccurenceType.EndOfTurn);
 
@@ -826,7 +829,7 @@ namespace SolastaMonkClass
             no_armor_restriction = new NewFeatureDefinitions.AndRestriction(new NewFeatureDefinitions.OrRestriction(new NewFeatureDefinitions.NoArmorRestriction(),
                                                                                                                     new NewFeatureDefinitions.NoShieldRestriction()
                                                                                                                     ),
-                                                                            new NewFeatureDefinitions.HasFeatureRestricition(way_of_iron_allow_using_monk_features_in_armor)
+                                                                            new NewFeatureDefinitions.HasFeatureRestriction(way_of_iron_allow_using_monk_features_in_armor)
                                                                         );
 
 
@@ -886,7 +889,9 @@ namespace SolastaMonkClass
                                                                                                                                     a.allowedWeaponTypes = monk_weapons;
                                                                                                                                     a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
                                                                                                                                     {
-                                                                                                                                        no_armor_restriction
+                                                                                                                                        no_armor_restriction,
+                                                                                                                                        new NewFeatureDefinitions.UsedAllMainAttacksRestriction(),
+                                                                                                                                        new NewFeatureDefinitions.FreeOffHandRestriciton()
                                                                                                                                     };
                                                                                                                                     a.clearAllAttacks = false;
                                                                                                                                     a.actionType = ActionDefinitions.ActionType.Bonus;
@@ -1479,7 +1484,7 @@ namespace SolastaMonkClass
                                                                                                                                 a.weaponTypes = way_of_iron_weapons;
                                                                                                                                 a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
                                                                                                                                 {
-                                                                                                                                   new NewFeatureDefinitions.HasFeatureRestricition(way_of_iron_allow_using_monk_features_in_armor)
+                                                                                                                                   new NewFeatureDefinitions.HasFeatureRestriction(way_of_iron_allow_using_monk_features_in_armor)
                                                                                                                                 };
                                                                                                                             }
                                                                                                                             );
@@ -1494,7 +1499,7 @@ namespace SolastaMonkClass
                                                                                                                                         a.weaponTypes = way_of_iron_weapons;
                                                                                                                                         a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
                                                                                                                                         {
-                                                                                                                                           new NewFeatureDefinitions.HasFeatureRestricition(way_of_iron_allow_using_monk_features_in_armor)
+                                                                                                                                           new NewFeatureDefinitions.HasFeatureRestriction(way_of_iron_allow_using_monk_features_in_armor)
                                                                                                                                         };
                                                                                                                                         a.characterClass = monk_class;
                                                                                                                                         a.levelDamageList = new List<(int, int, RuleDefinitions.DieType)>
@@ -1517,7 +1522,9 @@ namespace SolastaMonkClass
                                                                                                                             a.allowedWeaponTypes = way_of_iron_weapons;
                                                                                                                             a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
                                                                                                                             {
-                                                                                                                                new NewFeatureDefinitions.HasFeatureRestricition(way_of_iron_allow_using_monk_features_in_armor)
+                                                                                                                                new NewFeatureDefinitions.HasFeatureRestriction(way_of_iron_allow_using_monk_features_in_armor),
+                                                                                                                                new NewFeatureDefinitions.UsedAllMainAttacksRestriction(),
+                                                                                                                                new NewFeatureDefinitions.FreeOffHandRestriciton()
                                                                                                                             };
                                                                                                                             a.clearAllAttacks = false;
                                                                                                                             a.actionType = ActionDefinitions.ActionType.Bonus;
@@ -1549,7 +1556,7 @@ namespace SolastaMonkClass
                                                                                                                     a.allowedWeaponTypes = way_of_iron_weapons;
                                                                                                                     a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
                                                                                                                     {
-                                                                                                                        new NewFeatureDefinitions.HasFeatureRestricition(way_of_iron_allow_using_monk_features_in_armor)
+                                                                                                                        new NewFeatureDefinitions.HasFeatureRestriction(way_of_iron_allow_using_monk_features_in_armor)
                                                                                                                     };
                                                                                                                     a.clearAllAttacks = true;
                                                                                                                     a.actionType = ActionDefinitions.ActionType.Main;
