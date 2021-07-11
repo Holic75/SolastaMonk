@@ -1,0 +1,86 @@
+Subclass/&MonkSubclassMonasticTraditionTitle	Klostertradition
+Subclass/&MonkSubclassMonasticTraditionDescription	Wählen Sie eine klösterliche Tradition
+Stage/&SubclassSelectionStageMonasticTraditionHeader	Klostertradition
+Stage/&SubclassSelectionStageMonasticTraditionTitle	Mönch klösterliche Tradition
+Stage/&SubclassSelectionStageMonasticTraditionFeatures	Merkmale der klösterlichen Tradition
+Class/&MonkClassTitle	Mönch
+Class/&MonkClassDescription	Denn das wahrhaft vorbildliche, kriegerische Können geht über das Schlachtfeld hinaus – es ist ein Lebensstil, eine Doktrin, ein Geisteszustand. Diese Krieger-Künstler suchen nach Kampfmethoden, die über Schwerter und Schilde hinausgehen, und finden Waffen in sich, die genauso lähmend oder töten können wie jede Klinge. Diese Mönche (so genannt, da sie an alten Philosophien und strengen Kampfdisziplinen festhalten) erheben ihren Körper zu Kriegswaffen, von kampflustigen Asketen zu autodidaktischen Schlägern. Mönche beschreiten den Pfad der Disziplin, und diejenigen, die den Willen haben, diesen Pfad zu ertragen, entdecken in sich selbst nicht, was sie sind, sondern was sie sein sollen.
+Feature/&MonkWeaponProficiencyTitle	Waffenkenntnisse der Mönche
+Feature/&MonkArmorProficiencyTitle	Fertigkeiten der Mönchsrüstung
+Feature/&MonkClassSkillPointPoolTitle	Mönchsfertigkeiten
+Feature/&MonkClassUnarmoredDefenseTitle	Ungepanzerte Verteidigung
+Feature/&MonkClassUnarmoredDefenseDescription	Ab der 1. Stufe beträgt deine RK 10 + dein Geschicklichkeitsmodifikator + dein Weisheitsmodifikator, solange du keine Rüstung und keinen Schild trägst.
+Feature/&MonkClassMartialArtsTitle	Kampfkünste
+Feature/&MonkClassMartialArtsDescription	Auf der 1. Stufe beherrschst du durch deine Ausübung der Kampfkünste Kampfstile, die unbewaffnete Schläge und Mönchswaffen verwenden, bei denen es sich um Kurzschwerter handelt, und einfache Nahkampfwaffen, die nicht die Eigenschaft Zweihändig oder Schwer haben.\nDu erhältst die folgenden Vorteile, wenn du unbewaffnet bist oder nur Mönchswaffen trägst und keine Rüstung oder keinen Schild trägst.\n- Du kannst Geschick anstelle von Stärke für die Angriffs- und Schadenswürfe deiner unbewaffneten Schläge und Mönchswaffen verwenden.\n- Du kannst einen W4 anstelle des normalen Schadens deines Waffenlosen Schlags oder deiner Mönchswaffe würfeln. Dieser Würfel ändert sich, wenn du Mönchsstufen erreichst (W6 auf der 5. Stufe, W8 auf der 11. Stufe, W10 auf der 17. Stufe).\n- Wenn du die Angriffsaktion mit einem Waffenlosen Schlag oder einer Mönchswaffe in deinem Zug verwendest, kannst du einen waffenlosen Schlag als Bonusaktion ausführen.
+Feature/&MonkClassUnarmoredMovementTitle	Ungepanzerte Bewegung
+Feature/&MonkClassUnarmoredMovementDescription	Ab der 2. Stufe erhöht sich deine Geschwindigkeit um 3 m, wenn du keine Rüstung oder keinen Schild trägst. Dieser Bonus erhöht sich, wenn Sie bestimmte Mönchsstufen erreichen.
+Feature/&MonkClassUnarmoredMovementImprovementTitle	Verbesserung der ungepanzerten Bewegung
+Feature/&MonkClassUnarmoredMovementImprovementDescription	Auf der <LEVEL>-ten Stufe erhöht sich dein Geschwindigkeitsbonus für ungepanzerte Geschwindigkeit auf <FEET> Fuß, wenn du keine Rüstung oder keinen Schild trägst.
+Feature/&MonkClassKiTitle	Ki
+Feature/&MonkClassKiDescription	Ab der 2. Stufe ermöglicht dir dein Training, die mystische Energie des Ki zu nutzen. Ihr Zugang zu dieser Energie wird durch eine Anzahl von Ki-Punkten repräsentiert, die Ihrem Mönchslevel entspricht. Du kannst diese Punkte ausgeben, um verschiedene Ki-Features zu tanken.\nDeine Ki-Punkte werden nach einer kurzen Pause wieder aufgefüllt.\nEinige deiner Ki-Features erfordern, dass dein Ziel einen Rettungswurf macht, um den Effekten des Features zu widerstehen. Der Rettungswurf-SG wird wie folgt berechnet:\nKi speichern SG = 8 + dein Fähigkeitsbonus + dein Weisheitsmodifikator.
+Feature/&MonkClassFlurryOfBlowsPowerTitle	Wirbel der Schläge
+Feature/&MonkClassFlurryOfBlowsPowerDescription	Unmittelbar nachdem du in deinem Zug die Angriffsaktion ausgeführt hast, kannst du 1 Ki-Punkt ausgeben, um als Bonusaktion zwei unbewaffnete Schläge auszuführen.
+Feature/&MonkClassPatientDefensePowerTitle	Patientenverteidigung
+Feature/&MonkClassPatientDefensePowerDescription	Sie können 1 Ki-Punkt ausgeben, um die Aktion Ausweichen als Bonusaktion in Ihrem Zug auszuführen.
+Feature/&MonkClassStepOfTheWindPowerTitle	Schritt des Windes
+Feature/&MonkClassStepOfTheWindDashPowerTitle	Schritt des Windes (Strich)
+Feature/&MonkClassStepOfTheWindDisengagePowerTitle	Schritt des Windes (Ausschalten)
+Feature/&MonkClassStepOfTheWindPowerDescription	Sie können 1 Ki-Punkt ausgeben, um die Aktion "Ausrücken" oder "Sprinten" als Bonusaktion in Ihrem Zug auszuführen, und Ihre Sprungweite wird für den Zug verdoppelt.
+Feature/&MonkClassDeflectMissilesTitle	Raketen ablenken
+Feature/&MonkClassDeflectMissilesDescription	Ab der 3. Stufe kannst du deine Reaktion nutzen, um die Rakete abzulenken oder zu fangen, wenn du von einem Fernkampfangriff getroffen wirst. Wenn du dies tust, wird der Schaden, den du durch den Angriff erleidest, um 1W10 + deinen Geschicklichkeitsmodifikator + deine Mönchsstufe reduziert.
+Feature/&MonkClasSlowfallTitle	Slowfall
+Feature/&MonkClasSlowfallDescription	Ab der 4. Stufe kannst du deine Reaktion beim Fallen verwenden, um zu verhindern, dass ein Sturz Schaden nimmt und auf deinen Füßen landet.
+Reaction/&UseMonkClasSlowfallPowerReactDescription	Verwenden Sie Ihre Reaktion, um Schäden durch Sturz und Landung auf Ihren Füßen zu verhindern.
+Feature/&MonkClassStunningStrikeTitle	Atemberaubender Schlag
+Feature/&MonkClassStunningStrikeDescription	Ab der 5. Stufe können Sie den Ki-Fluss im Körper eines Gegners stören. Wenn du eine andere Kreatur mit einem Nahkampfwaffenangriff triffst, kannst du 1 Ki-Punkt ausgeben, um einen Betäubungsschlag zu versuchen. Dem Ziel muss ein Konstitutionsrettungswurf gelingen oder es muss bis zum Ende deines nächsten Zuges betäubt sein.
+Reaction/&SpendMonkClassStunningStrikePowerReactDescription	Gib 1 Ki-Punkt aus, um zu versuchen, das Ziel zu betäuben.
+Feature/&MonkClassKiEmpoweredStrikesTitle	Ki-verstärkte Schläge
+Feature/&MonkClassKiEmpoweredStrikesDescription	Ab der 6. Stufe zählen deine unbewaffneten Schläge als magisch, um Widerstand und Immunität gegen nichtmagische Angriffe und Schaden zu überwinden.
+Feature/&MonkClassUnarmoredMovement9Title	Verbesserung der ungepanzerten Bewegung (vertikale Oberflächen)
+Feature/&MonkClassUnarmoredMovement9Description	Auf der 9. Stufe erhalten Sie die Fähigkeit, sich in Ihrem Zug an vertikalen Oberflächen und über Flüssigkeiten zu bewegen, ohne während Ihrer Bewegung zu fallen.
+Feature/&MonkClassStillnessOfMindTitle	Stille des Geistes
+Feature/&MonkClassStillnessOfMindDescription	Ab Stufe 7 kannst du mit deiner Aktion einen Effekt auf dich beenden, der dich verzaubert oder verängstigt.
+Feature/&MonkClassPurityOfBodyTitle	Reinheit des Körpers
+Feature/&MonkClassPurityOfBodyDescription	Auf der 10. Stufe macht dich deine Beherrschung des durch dich fließenden Ki immun gegen Krankheit und Gift.
+Subclass/&MonkSubclassWayOfTheOpenHandTitle	Weg der offenen Hand
+Subclass/&MonkSubclassWayOfTheOpenHandDescription	Mönche des Weges der offenen Hand sind die ultimativen Meister des Kampfkunstkampfes, egal ob bewaffnet oder unbewaffnet. Sie lernen Techniken, um ihre Gegner zu schubsen und zu Fall zu bringen, Ki zu manipulieren, um Schäden an ihrem Körper zu heilen, und praktizieren fortgeschrittene Meditation, die sie vor Schaden schützen kann.
+Feature/&MonkSubclassWayOfTheOpenHandTechniqueTitle	Offene Hand-Technik
+Feature/&MonkSubclassWayOfTheOpenHandTechniqueDescription	Wenn Sie diese Tradition auf der 3. Stufe wählen, können Sie das Ki Ihres Feindes manipulieren, wenn Sie Ihr eigenes nutzen. Immer wenn du eine Kreatur mit einem der Angriffe deines Schlaghagels triffst, kannst du diesem Ziel einen der folgenden Effekte auferlegen:\n- Es muss ein Geschicklichkeitsrettungswurf gelingen oder er wird zu Boden geworfen.\n- Es muss einen Kraftrettungswurf machen. Wenn es fehlschlägt, können Sie es bis zu 4,5 m von sich wegschieben.\n- Es kann bis zum Ende deines nächsten Zuges keine Reaktionen annehmen.
+Feature/&MonkSubclassWayOfTheOpenHandForbidReactionTitle	Offene Hand-Technik: Reaktionen verbieten
+Feature/&MonkSubclassWayOfTheOpenHandForbidReactionDescription	Das Ziel kann bis zum Ende deines nächsten Zuges keine Reaktionen ausführen.
+Rules/&ConditionMonkSubclassWayOfTheOpenHandForbidReactionPowerTitle	Reaktionen verboten
+Rules/&ConditionMonkSubclassWayOfTheOpenHandForbidReactionPowerDescription	Sie können keine Reaktionen annehmen.
+Reaction/&SpendMonkSubclassWayOfTheOpenHandForbidReactionPowerReactDescription	Verhindern Sie, dass das Ziel Reaktionen verwendet.
+Feature/&MonkSubclassWayOfTheOpenHandPushTitle	Offene Hand-Technik: Drücken
+Feature/&MonkSubclassWayOfTheOpenHandPushDescription	Das Ziel muss einen Stärkerettungswurf machen. Wenn es fehlschlägt, können Sie es bis zu 15 Fuß von sich wegschieben.
+Reaction/&SpendMonkSubclassWayOfTheOpenHandPushPowerReactDescription	Versuchen Sie, das Ziel zu schieben.
+Feature/&MonkSubclassWayOfTheOpenHandKnockTitle	Offene Hand Technik: Klopfen
+Feature/&MonkSubclassWayOfTheOpenHandKnockDescription	Das Ziel muss einen Geschicklichkeitsrettungswurf erfolgreich ausführen oder wird zu Boden geworfen.
+Reaction/&SpendMonkSubclassWayOfTheOpenHandKnockPowerReactDescription	Versuchen Sie, das Ziel niederzuschlagen.
+Feature/&MonkSubclassWayOfTheOpenHandWholenessOfBodyTitle	Ganzheit des Körpers
+Feature/&MonkSubclassWayOfTheOpenHandWholenessOfBodyDescription	Auf der 6. Stufe erlangst du die Fähigkeit, dich selbst zu heilen. Als Aktion kannst du Trefferpunkte in Höhe des Dreifachen deiner Mönchsstufe zurückgewinnen. Sie müssen eine lange Pause einlegen, bevor Sie diese Funktion wieder verwenden können.
+Subclass/&MonkSubclassWayOfThePyrokineTitle	Weg der sengenden Flamme
+Subclass/&MonkSubclassWayOfThePyrokineDescription	Wenn du in Flammen schaust, schauen sie nicht nur zurück, sie blicken in deine Seele und entzünden das ewige Feuer, das in dir brennt. Mit Übung und Disziplin nutzen Sie diese innere Flamme und manifestieren sie, um Ihre Schläge Fleisch zu versengen, Ihre Schläge Feinde zu versengen.
+Feature/&MonkSubclassWayOfThePyrokineTechniqueTitle	Flammende Technik
+Feature/&MonkSubclassWayOfThePyrokineTechniqueDescription	Wenn Sie sich auf der 3. Stufe für diese Tradition entscheiden, lernen Sie, mit Ki Flammen zu beschwören. Immer wenn du eine Kreatur mit einem der Angriffe deines Schlaghagels triffst, kannst du diesem Ziel einen der folgenden Effekte auferlegen:\n- Es muss ein Geschicklichkeitsrettungswurf gelingen oder es entzündet sich. Bis eine Kreatur eine Aktion zum Löschen des Feuers ausführt, erleidet das Ziel zu Beginn jedes seiner Züge 2 (1W4) Feuerschaden.\n -Es erleidet zusätzlich 1W4 Feuerschaden.\n -Er muss bei einem Weisheitsrettungswurf erfolgreich sein oder bis zum Ende deines nächsten Zuges blind werden.
+Feature/&MonkSubclassWayOfThePyrokineBurnTitle	Flammende Technik: Entzünden
+Feature/&MonkSubclassWayOfThePyrokineBurnDescription	Das Ziel muss einen Geschicklichkeitsrettungswurf erfolgreich ausführen, oder es entzündet sich. Das Ziel erleidet zu Beginn jedes seiner Züge (1W4) Feuerschaden. In jeder Runde kann das Ziel einen Geschicklichkeitsrettungswurf versuchen; die Bedingung wird im Erfolgsfall entfernt.
+Rules/&ConditionMonkSubclassWayOfThePyrokineBurnPowerTitle	Verbrennung
+Rules/&ConditionMonkSubclassWayOfThePyrokineBurnPowerDescription	Du erleidest zu Beginn jeder Runde 1W4 Feuerschaden, bis dir ein Geschicklichkeitsrettungswurf gelingt.
+Reaction/&SpendMonkSubclassWayOfThePyrokineBurnPowerReactDescription	Versuchen Sie, das Ziel zu entzünden.
+Feature/&MonkSubclassWayOfThePyrokineDamageTitle	Flammende Technik: Schaden
+Feature/&MonkSubclassWayOfThePyrokineDamageDescription	Das Ziel erleidet zusätzlich 1W4 Punkte Feuerschaden.
+Reaction/&SpendMonkSubclassWayOfThePyrokineDamagePowerReactDescription	Füge dem Ziel zusätzlichen Feuerschaden zu.
+Feature/&MonkSubclassWayOfThePyrokineBlindTitle	Flammende Technik: Blind
+Feature/&MonkSubclassWayOfThePyrokineBlindDescription	Das Ziel muss bei einem Weisheitsrettungswurf erfolgreich sein oder bis zum Ende deines nächsten Zuges geblendet sein.
+Reaction/&SpendMonkSubclassWayOfThePyrokineBlindPowerReactDescription	Versuchen Sie, das Ziel zu blenden.
+Feature/&MonkSubclassWayOfThePyrokineBurningDevotionTitle	Brennende Hingabe
+Feature/&MonkSubclassWayOfThePyrokineBurningDevotionDescription	Ab der 6. Stufe erhältst du Widerstand gegen Feuerschaden.
+Subclass/&MonkSubclassWayOfIronTitle	Weg des Eisens
+Subclass/&MonkSubclassWayOfIronDescription	Die über die ganze Welt verstreuten Klöster bieten Wege zur Erleuchtung. Was Erleuchtung bedeutet, ist von Kloster zu Kloster unterschiedlich. Für manche könnte es bedeuten, Körper und Geist zu vereinen, um die Grenzen der physischen Form zu überschreiten, und für andere könnte es bedeuten, eins mit dem Universum zu werden.\nAnhänger des eisernen Weges suchen Ruhe in der Kampfkunst. Im Gegensatz zu anderen klösterlichen Traditionen konzentriert sich der Eisenweg auf den Gebrauch von Waffen und behandelt sie als Erweiterungen des eigenen Körpers des Mönchs. Anhänger des eisernen Weges sind normalerweise Frontkämpfer und lassen ihre Schläfen zurück, um Schulter an Schulter mit den einfachen Soldaten am Kampftanz teilzunehmen. Großmeister des Eisenweges führen jede Waffe mit solcher Anmut und Leichtigkeit, dass die Waffen immer ein Teil von ihnen gewesen zu sein scheinen, wie es eine Hand oder ein Auge sein würde, und ihre Bewegungen und Angriffe sind voller anmutiger Bögen und wirbelnder Schnörkel die den Kampf eher als Tanz denn als Konflikt erscheinen lassen.\nAnhänger des eisernen Weges trainieren unermüdlich miteinander und gehören zu den außergewöhnlichsten Duellanten der Welt, da sie ihre Fähigkeiten gegen die besten Krieger ihrer Tempel verfeinert haben.
+Feature/&MonkSubclassWayOfIronRoilingStormOfIronTitle	Tosender Sturm aus Eisen
+Feature/&MonkSubclassWayOfIronRoilingStormOfIronDescription	Wenn du diese Tradition auf der 3. Stufe wählst, erlangst du Kenntnisse in allen Waffen und leichten und mittleren Rüstungen und Schilden. Außerdem sind alle Nahkampfwaffen, die nicht die schwere Eigenschaft haben, Mönchswaffen für dich.
+Feature/&MonkSubclassWayOfIronShiftingBladesTitle	Wechselklingen
+Feature/&MonkSubclassWayOfIronShiftingBladesDescription	Ab der 6. Stufe gelten Angriffe mit Mönchswaffen als magisch, um Widerstand und Immunität gegen nichtmagische Angriffe und Schaden zu überwinden.
+Feature/&MonkSubclassWayOfIronTestOfSkillTitle	Fähigkeitstest
+Feature/&MonkSubclassWayOfIronTestOfSkillDescription	Auf der 3. Stufe kannst du andere Kreaturen dazu zwingen, dich einer Kampfkunstprüfung zu unterziehen. Eine Kreatur, die Sie sehen können, die sich innerhalb von 9 m von Ihnen befindet und die Sie hören und verstehen kann, müssen einen Weisheitsrettungswurf machen. Bei einem fehlgeschlagenen Rettungswurf hat die Kreatur 1 Minute lang einen Nachteil bei Angriffswürfen gegen andere Kreaturen als dich. Dieser Effekt endet, wenn eine zu dir befreundete Kreatur der betroffenen Kreatur Schaden zufügt oder einen schädlichen Zauberspruch auf sie wirkt.
