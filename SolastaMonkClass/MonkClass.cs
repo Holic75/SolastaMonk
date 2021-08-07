@@ -36,7 +36,8 @@ namespace SolastaMonkClass
             Helpers.WeaponProficiencies.Rapier,
             Helpers.WeaponProficiencies.MorningStar,
             Helpers.WeaponProficiencies.Warhammer,
-            Helpers.WeaponProficiencies.Scimitar
+            Helpers.WeaponProficiencies.Scimitar,
+            Helpers.WeaponProficiencies.LongSword
         };
 
         static public CharacterClassDefinition monk_class;
