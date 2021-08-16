@@ -147,6 +147,7 @@ namespace SolastaMonkClass
                                         EquipmentOptionsBuilder.Option(DatabaseHelper.ItemDefinitions.ExplorerPack, EquipmentDefinitions.OptionStarterPack, 1),
                                     }
             );
+                                
 
             this.AddEquipmentRow(new List<CharacterClassDefinition.HeroEquipmentOption>
             {
@@ -269,7 +270,8 @@ namespace SolastaMonkClass
                                                                         FeatureDefinitionFeatureSet.FeatureSetMode.Union,
                                                                         false,
                                                                         DatabaseHelper.FeatureDefinitionConditionAffinitys.ConditionAffinityPoisonImmunity,
-                                                                        DatabaseHelper.FeatureDefinitionConditionAffinitys.ConditionAffinityDiseaseImmunity
+                                                                        DatabaseHelper.FeatureDefinitionConditionAffinitys.ConditionAffinityDiseaseImmunity,
+                                                                        DatabaseHelper.FeatureDefinitionDamageAffinitys.DamageAffinityPoisonImmunity
                                                                         );
         }
 
