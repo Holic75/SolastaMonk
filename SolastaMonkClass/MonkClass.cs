@@ -673,7 +673,7 @@ namespace SolastaMonkClass
                                                                                                                     null,
                                                                                                                     a =>
                                                                                                                     {
-                                                                                                                        a.allowedWeaponTypes = monk_weapons;
+                                                                                                                        a.allowedWeaponTypes = new List<string>();
                                                                                                                         a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
                                                                                                                         {
                                                                                                                             no_armor_restriction
@@ -1331,6 +1331,7 @@ namespace SolastaMonkClass
             effect.SetSavingThrowDifficultyAbility(Helpers.Stats.Wisdom);
             effect.SavingThrowAbility = Helpers.Stats.Dexterity;
             effect.hasSavingThrow = true;
+            effect.effectParticleParameters.impactParticleReference = DatabaseHelper.SpellDefinitions.FireBolt.EffectDescription.effectParticleParameters.impactParticleReference;
             effect.SetDifficultyClassComputation(RuleDefinitions.EffectDifficultyClassComputation.AbilityScoreAndProficiency);           
             effect.EffectForms.Clear();
 
@@ -1384,6 +1385,7 @@ namespace SolastaMonkClass
             effect.SetSavingThrowDifficultyAbility(Helpers.Stats.Wisdom);
             effect.SavingThrowAbility = Helpers.Stats.Wisdom;
             effect.hasSavingThrow = true;
+            effect.effectParticleParameters.impactParticleReference = DatabaseHelper.SpellDefinitions.FireBolt.EffectDescription.effectParticleParameters.impactParticleReference;
             effect.SetDifficultyClassComputation(RuleDefinitions.EffectDifficultyClassComputation.AbilityScoreAndProficiency);
             effect.EffectForms.Clear();
 
@@ -1436,6 +1438,7 @@ namespace SolastaMonkClass
             effect.SetSavingThrowDifficultyAbility(Helpers.Stats.Wisdom);
             effect.SavingThrowAbility = Helpers.Stats.Wisdom;
             effect.hasSavingThrow = false;
+            effect.effectParticleParameters.impactParticleReference = DatabaseHelper.SpellDefinitions.FireBolt.EffectDescription.effectParticleParameters.impactParticleReference;
             effect.SetDifficultyClassComputation(RuleDefinitions.EffectDifficultyClassComputation.AbilityScoreAndProficiency);
             effect.EffectForms.Clear();
 
@@ -1566,7 +1569,7 @@ namespace SolastaMonkClass
                                                                                                                 }
                                                                                                                 );
 
-            flurry_of_blows_condition.features.Add(flurry_unarmed_attack_way_of_iron);
+            //flurry_of_blows_condition.features.Add(flurry_unarmed_attack_way_of_iron);
 
         }
 
