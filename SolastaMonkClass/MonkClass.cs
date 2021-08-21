@@ -45,6 +45,7 @@ namespace SolastaMonkClass
         static public FeatureDefinitionFeatureSet martial_arts;
         static public FeatureDefinition way_of_iron_allow_using_monk_features_in_armor;
         static public NewFeatureDefinitions.IRestriction no_armor_restriction;
+        static public NewFeatureDefinitions.HasAtLeastOneConditionFromListRestriction attacked_with_monk_weapon_restriction;
         static public NewFeatureDefinitions.MovementBonusWithRestrictions unarmored_movement;
         static public Dictionary<int, NewFeatureDefinitions.MovementBonusWithRestrictions> unarmored_movement_improvements = new Dictionary<int, NewFeatureDefinitions.MovementBonusWithRestrictions>();
         static List<int> unarmored_movement_improvement_levels = new List<int> { 6, 10, 14, 18 };
@@ -726,6 +727,7 @@ namespace SolastaMonkClass
                                                                      );
             flurry_of_blows.restrictions = new List<NewFeatureDefinitions.IRestriction>()
                                             {
+                                                attacked_with_monk_weapon_restriction,
                                                 no_armor_restriction,
                                                 new NewFeatureDefinitions.UsedAllMainAttacksRestriction(),
                                                 new NewFeatureDefinitions.FreeOffHandRestriciton()
@@ -844,6 +846,35 @@ namespace SolastaMonkClass
             string martial_arts_title_string = "Feature/&MonkClassMartialArtsTitle";
             string martial_arts_description_string = "Feature/&MonkClassMartialArtsDescription";
 
+            var attacked_with_monk_weapon_condition = Helpers.ConditionBuilder.createConditionWithInterruptions("MonkClassMartialArtsAttackedWithMonkWeaponCondition",
+                                                                                                                "",
+                                                                                                                Common.common_no_title,
+                                                                                                                Common.common_no_title,
+                                                                                                                Common.common_no_icon,
+                                                                                                                DatabaseHelper.ConditionDefinitions.ConditionDummy,
+                                                                                                                new RuleDefinitions.ConditionInterruption[] { RuleDefinitions.ConditionInterruption.AnyBattleTurnEnd }
+                                                                                                                );
+            attacked_with_monk_weapon_condition.silentWhenAdded = true;
+            attacked_with_monk_weapon_condition.silentWhenRemoved = true;
+            NewFeatureDefinitions.ConditionsData.no_refresh_conditions.Add(attacked_with_monk_weapon_condition);
+            attacked_with_monk_weapon_condition.guiPresentation.hidden = true;
+            var attacked_with_monk_weapon_watcher = Helpers.FeatureBuilder<NewFeatureDefinitions.InitiatorApplyConditionOnAttackToAttackerOnlyWithWeaponCategory>.createFeature("MonkClassMartialArtsAttackedWithMonkWeaponWatcher",
+                                                                                                                                                                                "",
+                                                                                                                                                                                Common.common_no_title,
+                                                                                                                                                                                Common.common_no_title,
+                                                                                                                                                                                Common.common_no_icon,
+                                                                                                                                                                                a =>
+                                                                                                                                                                                {
+                                                                                                                                                                                    a.allowedWeaponTypes = monk_weapons;
+                                                                                                                                                                                    a.condition = attacked_with_monk_weapon_condition;
+                                                                                                                                                                                    a.durationType = RuleDefinitions.DurationType.Turn;
+                                                                                                                                                                                    a.durationValue = 1;
+                                                                                                                                                                                    a.turnOccurence = RuleDefinitions.TurnOccurenceType.EndOfTurn;
+                                                                                                                                                                                }
+                                                                                                                                                                                );
+
+            attacked_with_monk_weapon_restriction = new NewFeatureDefinitions.HasAtLeastOneConditionFromListRestriction(attacked_with_monk_weapon_condition);
+
             var dex_on_weapons = Helpers.FeatureBuilder<NewFeatureDefinitions.canUseDexterityWithSpecifiedWeaponTypes>.createFeature("MonkClassMartialArtsDexForWeapons",
                                                                                                                                         "",
                                                                                                                                         Common.common_no_title,
@@ -892,6 +923,7 @@ namespace SolastaMonkClass
                                                                                                                                     a.allowedWeaponTypes = monk_weapons;
                                                                                                                                     a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
                                                                                                                                     {
+                                                                                                                                        attacked_with_monk_weapon_restriction,
                                                                                                                                         no_armor_restriction,
                                                                                                                                         new NewFeatureDefinitions.UsedAllMainAttacksRestriction(),
                                                                                                                                         new NewFeatureDefinitions.FreeOffHandRestriciton()
@@ -910,7 +942,8 @@ namespace SolastaMonkClass
                                                                       false,
                                                                       dex_on_weapons,
                                                                       damage_dice,
-                                                                      bonus_unarmed_attack
+                                                                      bonus_unarmed_attack,
+                                                                      attacked_with_monk_weapon_watcher
                                                                       );
 
         }
@@ -1479,6 +1512,34 @@ namespace SolastaMonkClass
             string roiling_storm_of_iron_title_string = "Feature/&MonkSubclassWayOfIronRoilingStormOfIronTitle";
             string roiling_storm_of_iron_description_string = "Feature/&MonkSubclassWayOfIronRoilingStormOfIronDescription";
 
+            var attacked_with_monk_weapon_condition = Helpers.ConditionBuilder.createConditionWithInterruptions("MonkSubclassWayOfIronRoilingStormOfIronAttackedWithMonkWeaponCondition",
+                                                                                                    "",
+                                                                                                    Common.common_no_title,
+                                                                                                    Common.common_no_title,
+                                                                                                    Common.common_no_icon,
+                                                                                                    DatabaseHelper.ConditionDefinitions.ConditionDummy,
+                                                                                                    new RuleDefinitions.ConditionInterruption[] { RuleDefinitions.ConditionInterruption.AnyBattleTurnEnd }
+                                                                                                    );
+            attacked_with_monk_weapon_condition.silentWhenAdded = true;
+            attacked_with_monk_weapon_condition.silentWhenRemoved = true;
+            NewFeatureDefinitions.ConditionsData.no_refresh_conditions.Add(attacked_with_monk_weapon_condition);
+            attacked_with_monk_weapon_condition.guiPresentation.hidden = true;
+            var attacked_with_monk_weapon_watcher = Helpers.FeatureBuilder<NewFeatureDefinitions.InitiatorApplyConditionOnAttackToAttackerOnlyWithWeaponCategory>.createFeature("MonkSubclassWayOfIronRoilingStormOfIronhMonkWeaponWatcher",
+                                                                                                                                                                                "",
+                                                                                                                                                                                Common.common_no_title,
+                                                                                                                                                                                Common.common_no_title,
+                                                                                                                                                                                Common.common_no_icon,
+                                                                                                                                                                                a =>
+                                                                                                                                                                                {
+                                                                                                                                                                                    a.allowedWeaponTypes = way_of_iron_weapons;
+                                                                                                                                                                                    a.condition = attacked_with_monk_weapon_condition;
+                                                                                                                                                                                    a.durationType = RuleDefinitions.DurationType.Turn;
+                                                                                                                                                                                    a.durationValue = 1;
+                                                                                                                                                                                    a.turnOccurence = RuleDefinitions.TurnOccurenceType.EndOfTurn;
+                                                                                                                                                                                }
+                                                                                                                                                                                );
+
+            attacked_with_monk_weapon_restriction.conditions.Add(attacked_with_monk_weapon_condition);
 
             var dex_on_weapons = Helpers.FeatureBuilder<NewFeatureDefinitions.canUseDexterityWithSpecifiedWeaponTypes>.createFeature("MonkSubclassWayOfIronMartialArtsDexForWeapons",
                                                                                                                             "",
@@ -1518,6 +1579,7 @@ namespace SolastaMonkClass
                                                                                                                                     }
                                                                                                                                     );
 
+
             var bonus_unarmed_attack = Helpers.FeatureBuilder<NewFeatureDefinitions.ExtraUnarmedAttack>.createFeature("MonkSubclassWayOfIronMartialArtsBonusUnarmedAttack",
                                                                                                                         "",
                                                                                                                         Common.common_no_title,
@@ -1528,6 +1590,7 @@ namespace SolastaMonkClass
                                                                                                                             a.allowedWeaponTypes = way_of_iron_weapons;
                                                                                                                             a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
                                                                                                                             {
+                                                                                                                                attacked_with_monk_weapon_restriction,
                                                                                                                                 new NewFeatureDefinitions.HasFeatureRestriction(way_of_iron_allow_using_monk_features_in_armor),
                                                                                                                                 new NewFeatureDefinitions.UsedAllMainAttacksRestriction(),
                                                                                                                                 new NewFeatureDefinitions.FreeOffHandRestriciton()
