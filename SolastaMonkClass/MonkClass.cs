@@ -920,7 +920,7 @@ namespace SolastaMonkClass
                                                                                                                                 null,
                                                                                                                                 a =>
                                                                                                                                 {
-                                                                                                                                    a.allowedWeaponTypes = monk_weapons;
+                                                                                                                                    a.allowedWeaponTypes = new List<string>();
                                                                                                                                     a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
                                                                                                                                     {
                                                                                                                                         attacked_with_monk_weapon_restriction,
@@ -1587,7 +1587,7 @@ namespace SolastaMonkClass
                                                                                                                         null,
                                                                                                                         a =>
                                                                                                                         {
-                                                                                                                            a.allowedWeaponTypes = way_of_iron_weapons;
+                                                                                                                            a.allowedWeaponTypes = new List<string>();
                                                                                                                             a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
                                                                                                                             {
                                                                                                                                 attacked_with_monk_weapon_restriction,
@@ -1612,7 +1612,8 @@ namespace SolastaMonkClass
                                                                                DatabaseHelper.FeatureDefinitionProficiencys.ProficiencyRangerWeapon,
                                                                                dex_on_weapons,
                                                                                damage_dice,
-                                                                               bonus_unarmed_attack
+                                                                               bonus_unarmed_attack,
+                                                                               attacked_with_monk_weapon_watcher
                                                                                );
 
             var flurry_unarmed_attack_way_of_iron = Helpers.FeatureBuilder<NewFeatureDefinitions.ExtraUnarmedAttack>.createFeature("MonkSubclassWayOfIronFlurryOfBlowsUnarmedAttack",
@@ -1622,7 +1623,7 @@ namespace SolastaMonkClass
                                                                                                                 null,
                                                                                                                 a =>
                                                                                                                 {
-                                                                                                                    a.allowedWeaponTypes = way_of_iron_weapons;
+                                                                                                                    a.allowedWeaponTypes = new List<string>();
                                                                                                                     a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
                                                                                                                     {
                                                                                                                         new NewFeatureDefinitions.HasFeatureRestriction(way_of_iron_allow_using_monk_features_in_armor)
@@ -1744,7 +1745,7 @@ namespace SolastaMonkClass
             var gui_presentation = new GuiPresentationBuilder(
                     "Subclass/&MonkSubclassWayOfIronDescription",
                     "Subclass/&MonkSubclassWayOfIronTitle")
-                    .SetSpriteReference(DatabaseHelper.CharacterSubclassDefinitions.DomainBattle.GuiPresentation.SpriteReference)
+                    .SetSpriteReference(DatabaseHelper.CharacterSubclassDefinitions.MartialChampion.GuiPresentation.SpriteReference)
                     .Build();
 
             CharacterSubclassDefinition definition = new CharacterSubclassDefinitionBuilder("MonkSubclassWayOfIron", "c4e735e3-0a9e-4586-bd86-0137ce61ff63")
