@@ -95,7 +95,7 @@ namespace SolastaMonkClass
             Definition.GuiPresentation.SetSpriteReference(monk_class_sprite);
 
             Definition.SetClassAnimationId(AnimationDefinitions.ClassAnimationId.Fighter);
-            Definition.SetClassPictogramReference(fighter.ClassPictogramReference);
+            Definition.SetClassPictogramReference(DatabaseHelper.CharacterClassDefinitions.Rogue.ClassPictogramReference);
             Definition.SetDefaultBattleDecisions(fighter.DefaultBattleDecisions);
             Definition.SetHitDice(RuleDefinitions.DieType.D8);
             Definition.SetIngredientGatheringOdds(fighter.IngredientGatheringOdds);
