@@ -507,13 +507,14 @@ namespace SolastaMonkClass
             var step_of_the_wind_condition = Helpers.ConditionBuilder.createCondition("MonkClassStepOfTheWindCondition",
                                                                                      "",
                                                                                      step_of_the_wind_title_string,
-                                                                                     step_of_the_wind_description_string,
+                                                                                     step_of_the_wind_title_string,
                                                                                      null,
                                                                                      DatabaseHelper.ConditionDefinitions.ConditionHasted,
                                                                                      DatabaseHelper.FeatureDefinitionMovementAffinitys.MovementAffinityJump
                                                                                      );
             step_of_the_wind_condition.SetSubsequentOnRemoval(null);
             step_of_the_wind_powers = new List<NewFeatureDefinitions.PowerWithRestrictions>();
+            step_of_the_wind_condition.possessive = true;
 
             List<(string title, ConditionDefinition condition, AssetReferenceSprite sprite)> power_tuples = new List<(string title, ConditionDefinition condition, AssetReferenceSprite sprite)>
             {
@@ -602,12 +603,13 @@ namespace SolastaMonkClass
             var patient_defense_condition = Helpers.ConditionBuilder.createCondition("MonkClassPatientDefenseCondition",
                                                                                      "",
                                                                                      patient_defense_title_string,
-                                                                                     patient_defense_description_string,
+                                                                                     patient_defense_title_string,
                                                                                      null,
                                                                                      DatabaseHelper.ConditionDefinitions.ConditionHasted,
                                                                                      patient_defense_feature
                                                                                      );
             patient_defense_condition.SetSubsequentOnRemoval(null);
+            patient_defense_condition.possessive = true;
             var effect = new EffectDescription();
             effect.Copy(DatabaseHelper.SpellDefinitions.Haste.EffectDescription);
             effect.SetRangeType(RuleDefinitions.RangeType.Self);
@@ -688,7 +690,7 @@ namespace SolastaMonkClass
             flurry_of_blows_condition = Helpers.ConditionBuilder.createConditionWithInterruptions("MonkClassFlurryOfBlowsCondition",
                                                                                                   "",
                                                                                                   flurry_of_blows_title_string,
-                                                                                                  flurry_of_blows_description_string,
+                                                                                                  flurry_of_blows_title_string,
                                                                                                   null,
                                                                                                   DatabaseHelper.ConditionDefinitions.ConditionHasted,
                                                                                                   new RuleDefinitions.ConditionInterruption[] {RuleDefinitions.ConditionInterruption.AnyBattleTurnEnd },
@@ -697,6 +699,7 @@ namespace SolastaMonkClass
                                                                                                   flurry_of_blows_feature_extra_attack
                                                                                                   );
             flurry_of_blows_condition.SetSubsequentOnRemoval(null);
+            flurry_of_blows_condition.possessive = true;
             var effect = new EffectDescription();
             effect.Copy(DatabaseHelper.SpellDefinitions.Haste.EffectDescription);
             effect.SetRangeType(RuleDefinitions.RangeType.Self);
@@ -1666,8 +1669,8 @@ namespace SolastaMonkClass
 
             var condition = Helpers.ConditionBuilder.createCondition("MonkSubclassWayOfIronTestOfSkillCondition",
                                                                     "",
-                                                                    test_of_skills_title_string,
-                                                                    test_of_skills_description_string,
+                                                                    "Rules/&ConditionMonkSubclassWayOfIronTestOfSkillTitle",
+                                                                    "Rules/&ConditionMonkSubclassWayOfIronTestOfSkillDescription",
                                                                     null,
                                                                     DatabaseHelper.ConditionDefinitions.ConditionDazzled);
 
