@@ -69,19 +69,21 @@ namespace SolastaMonkClass
         static public NewFeatureDefinitions.PowerWithRestrictions open_hand_technique_push;
         static public NewFeatureDefinitions.PowerWithRestrictions open_hand_technique_forbid_reaction;
         static public FeatureDefinitionPower wholeness_of_body;
+        //tranquility sanctuary effect - can not be target of attacks if creature do not pass a will saving throw
         //Way of Pyrokine
         static public FeatureDefinitionFeatureSet blazing_technique;
         static public NewFeatureDefinitions.PowerWithRestrictions blazing_technique_burn;
         static public NewFeatureDefinitions.PowerWithRestrictions blazing_technique_damage;
         static public NewFeatureDefinitions.PowerWithRestrictions blazing_technique_blind;
         static public FeatureDefinitionFeatureSet burning_devotion;
+        //leeping flames - constant jump
         //Way of Iron
         static public FeatureDefinitionFeatureSet roiling_storm_of_iron;
         static public FeatureDefinitionPower test_of_skill;
         static public NewFeatureDefinitions.AddAttackTagForSpecificWeaponType shifting_blades;
+        //whirlwind of steel - allow make attacks with monk weapons (i.e. all meelee ones)
 
-
-
+        
         protected MonkClassBuilder(string name, string guid) : base(name, guid)
         {
             var monk_class_sprite = SolastaModHelpers.CustomIcons.Tools.storeCustomIcon("MonkClassSprite",
