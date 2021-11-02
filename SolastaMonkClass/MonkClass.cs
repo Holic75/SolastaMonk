@@ -69,18 +69,19 @@ namespace SolastaMonkClass
         static public NewFeatureDefinitions.PowerWithRestrictions open_hand_technique_push;
         static public NewFeatureDefinitions.PowerWithRestrictions open_hand_technique_forbid_reaction;
         static public FeatureDefinitionPower wholeness_of_body;
-        //tranquility sanctuary effect - can not be target of attacks if creature do not pass a will saving throw
+        static public FeatureDefinitionAbilityCheckAffinity tranquility;
         //Way of Pyrokine
         static public FeatureDefinitionFeatureSet blazing_technique;
         static public NewFeatureDefinitions.PowerWithRestrictions blazing_technique_burn;
         static public NewFeatureDefinitions.PowerWithRestrictions blazing_technique_damage;
         static public NewFeatureDefinitions.PowerWithRestrictions blazing_technique_blind;
         static public FeatureDefinitionFeatureSet burning_devotion;
-        //leeping flames - constant jump
+        static public FeatureDefinitionAbilityCheckAffinity leaping_flames;
         //Way of Iron
         static public FeatureDefinitionFeatureSet roiling_storm_of_iron;
         static public FeatureDefinitionPower test_of_skill;
         static public NewFeatureDefinitions.AddAttackTagForSpecificWeaponType shifting_blades;
+        static public FeatureDefinition whirlwind_of_iron;
         //whirlwind of steel - allow make attacks with monk weapons (i.e. all meelee ones)
 
         
@@ -671,6 +672,11 @@ namespace SolastaMonkClass
                                                                                                                            }
                                                                                                                            );
 
+            whirlwind_of_iron = Helpers.OnlyDescriptionFeatureBuilder.createOnlyDescriptionFeature("MonkSubclassWayOfIronWhirlwindOfIronFeature",
+                                                                                                   "",
+                                                                                                   "Feature/&MonkSubclassWayOfIronWhirlwindOfIronTitle",
+                                                                                                   "Feature/&MonkSubclassWayOfIronWhirlwindOfIronDescription",
+                                                                                                   Common.common_no_icon);
             var unarmed_attack = Helpers.FeatureBuilder<NewFeatureDefinitions.ExtraUnarmedAttack>.createFeature("MonkClassFlurryOfBlowsUnarmedAttack",
                                                                                                                     "",
                                                                                                                     Common.common_no_title,
@@ -678,7 +684,11 @@ namespace SolastaMonkClass
                                                                                                                     null,
                                                                                                                     a =>
                                                                                                                     {
-                                                                                                                        a.allowedWeaponTypes = new List<string>();
+                                                                                                                        a.allowedWeaponTypesIfHasRequiredFeature = new List<string>();
+                                                                                                                        a.allowedWeaponTypesIfHasRequiredFeature.AddRange(monk_weapons);
+                                                                                                                        a.allowedWeaponTypesIfHasRequiredFeature.AddRange(way_of_iron_weapons);
+                                                                                                                        a.allowedWeaponTypesIfHasRequiredFeature.Remove(Helpers.WeaponProficiencies.Unarmed);
+                                                                                                                        a.requiredFeature = whirlwind_of_iron;
                                                                                                                         a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
                                                                                                                         {
                                                                                                                             no_armor_restriction
@@ -823,10 +833,11 @@ namespace SolastaMonkClass
                                                                                                                     a.shieldAlowed = false;
                                                                                                                     a.stat = Helpers.Stats.Wisdom;
                                                                                                                     a.exclusive = true;
-                                                                                                                    a.forbiddenConditions = new List<ConditionDefinition>
+                                                                                                                    a.forbiddenFeatures = new List<FeatureDefinition>
                                                                                                                     {
-                                                                                                                        DatabaseHelper.ConditionDefinitions.ConditionBarkskin,
-                                                                                                                        DatabaseHelper.ConditionDefinitions.ConditionMagicallyArmored
+                                                                                                                        DatabaseHelper.FeatureDefinitionAttributeModifiers.AttributeModifierSorcererDraconicResilienceAC,
+                                                                                                                        DatabaseHelper.FeatureDefinitionAttributeModifiers.AttributeModifierMageArmor,
+                                                                                                                        DatabaseHelper.FeatureDefinitionAttributeModifiers.AttributeModifierBarkskin
                                                                                                                     };
                                                                                                                 }
                                                                                                                 );
@@ -925,7 +936,11 @@ namespace SolastaMonkClass
                                                                                                                                 null,
                                                                                                                                 a =>
                                                                                                                                 {
-                                                                                                                                    a.allowedWeaponTypes = new List<string>();
+                                                                                                                                    a.allowedWeaponTypesIfHasRequiredFeature = new List<string>();
+                                                                                                                                    a.allowedWeaponTypesIfHasRequiredFeature.AddRange(monk_weapons);
+                                                                                                                                    a.allowedWeaponTypesIfHasRequiredFeature.AddRange(way_of_iron_weapons);
+                                                                                                                                    a.allowedWeaponTypesIfHasRequiredFeature.Remove(Helpers.WeaponProficiencies.Unarmed);
+                                                                                                                                    a.requiredFeature = whirlwind_of_iron;
                                                                                                                                     a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
                                                                                                                                     {
                                                                                                                                         attacked_with_monk_weapon_restriction,
@@ -1220,10 +1235,27 @@ namespace SolastaMonkClass
         }
 
 
+        static void createTranquility()
+        {
+            string tranquility_title_string = "Feature/&MonkSubclassWayOfTheOpenHandTranquilityTitle";
+            string tranqulity_description_string = "Feature/&MonkSubclassWayOfTheOpenHandTranquilityDescription";
+            tranquility = Helpers.AbilityCheckAffinityBuilder.createSkillCheckAffinity("MonkSubclassWayOfTheOpenHandTranquility",
+                                                                                       "",
+                                                                                       tranquility_title_string,
+                                                                                       tranqulity_description_string,
+                                                                                       Common.common_no_icon,
+                                                                                       RuleDefinitions.CharacterAbilityCheckAffinity.Advantage,
+                                                                                       1,
+                                                                                       RuleDefinitions.DieType.D1,
+                                                                                       Helpers.Skills.Stealth
+                                                                                       );
+        }
+
         static CharacterSubclassDefinition createWayOfTheOpenHand()
         {
             createOpenHandTechnique();
             createWholenessOfBody();
+            createTranquility();
 
             var gui_presentation = new GuiPresentationBuilder(
                     "Subclass/&MonkSubclassWayOfTheOpenHandDescription",
@@ -1235,16 +1267,17 @@ namespace SolastaMonkClass
                     .SetGuiPresentation(gui_presentation)
                     .AddFeatureAtLevel(open_hand_technique, 3)
                     .AddFeatureAtLevel(wholeness_of_body, 6)
+                    .AddFeatureAtLevel(tranquility, 6)
                     .AddToDB();
 
             return definition;
         }
 
-
         static CharacterSubclassDefinition createWayOfThePyrokine()
         {
             createBlazingTechnique();
             createBurningDevotion();
+            createLeapingFlames();
 
             var gui_presentation = new GuiPresentationBuilder(
                     "Subclass/&MonkSubclassWayOfThePyrokineDescription",
@@ -1256,9 +1289,27 @@ namespace SolastaMonkClass
                     .SetGuiPresentation(gui_presentation)
                     .AddFeatureAtLevel(blazing_technique, 3)
                     .AddFeatureAtLevel(burning_devotion, 6)
+                    .AddFeatureAtLevel(leaping_flames, 11)
                     .AddToDB();
 
             return definition;
+        }
+
+
+        static void createLeapingFlames()
+        {
+            string leaping_flames_title_string = "Feature/&MonkSubclassWayOfThePyrokineLeapingFlamesTitle";
+            string leaping_flames_description_string = "Feature/&MonkSubclassWayOfThePyrokineLeapingFlamesDescription";
+            leaping_flames = Helpers.AbilityCheckAffinityBuilder.createSkillCheckAffinity("MonkSubclassWayOfThePyrokineLeapingFlames",
+                                                                                       "",
+                                                                                       leaping_flames_title_string,
+                                                                                       leaping_flames_description_string,
+                                                                                       Common.common_no_icon,
+                                                                                       RuleDefinitions.CharacterAbilityCheckAffinity.Advantage,
+                                                                                       1,
+                                                                                       RuleDefinitions.DieType.D1,
+                                                                                       Helpers.Skills.Acrobatics
+                                                                                       );
         }
 
 
@@ -1592,7 +1643,11 @@ namespace SolastaMonkClass
                                                                                                                         null,
                                                                                                                         a =>
                                                                                                                         {
-                                                                                                                            a.allowedWeaponTypes = new List<string>();
+                                                                                                                            a.allowedWeaponTypesIfHasRequiredFeature = new List<string>();
+                                                                                                                            a.allowedWeaponTypesIfHasRequiredFeature.AddRange(monk_weapons);
+                                                                                                                            a.allowedWeaponTypesIfHasRequiredFeature.AddRange(way_of_iron_weapons);
+                                                                                                                            a.allowedWeaponTypesIfHasRequiredFeature.Remove(Helpers.WeaponProficiencies.Unarmed);
+                                                                                                                            a.requiredFeature = whirlwind_of_iron;
                                                                                                                             a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
                                                                                                                             {
                                                                                                                                 attacked_with_monk_weapon_restriction,
@@ -1628,7 +1683,11 @@ namespace SolastaMonkClass
                                                                                                                 null,
                                                                                                                 a =>
                                                                                                                 {
-                                                                                                                    a.allowedWeaponTypes = new List<string>();
+                                                                                                                    a.allowedWeaponTypesIfHasRequiredFeature = new List<string>();
+                                                                                                                    a.allowedWeaponTypesIfHasRequiredFeature.AddRange(monk_weapons);
+                                                                                                                    a.allowedWeaponTypesIfHasRequiredFeature.AddRange(way_of_iron_weapons);
+                                                                                                                    a.allowedWeaponTypesIfHasRequiredFeature.Remove(Helpers.WeaponProficiencies.Unarmed);
+                                                                                                                    a.requiredFeature = whirlwind_of_iron;
                                                                                                                     a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
                                                                                                                     {
                                                                                                                         new NewFeatureDefinitions.HasFeatureRestriction(way_of_iron_allow_using_monk_features_in_armor)
@@ -1758,6 +1817,7 @@ namespace SolastaMonkClass
                     .AddFeatureAtLevel(roiling_storm_of_iron, 3)
                     .AddFeatureAtLevel(test_of_skill, 3)
                     .AddFeatureAtLevel(shifting_blades, 6)
+                    .AddFeatureAtLevel(whirlwind_of_iron, 11)
                     .AddToDB();
 
             return definition;

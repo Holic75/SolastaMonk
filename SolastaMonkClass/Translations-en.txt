@@ -59,6 +59,8 @@ Feature/&MonkSubclassWayOfTheOpenHandKnockDescription Target must succeed on a D
 Reaction/&SpendMonkSubclassWayOfTheOpenHandKnockPowerReactDescription Attmept to knockdown the target.
 Feature/&MonkSubclassWayOfTheOpenHandWholenessOfBodyTitle Wholeness of Body
 Feature/&MonkSubclassWayOfTheOpenHandWholenessOfBodyDescription At 6th level, you gain the ability to heal yourself. As an action, you can regain hit points equal to three times your monk level. You must finish a long rest before you can use this feature again.
+Feature/&MonkSubclassWayOfTheOpenHandTranquilityTitle	Tranquility
+Feature/&MonkSubclassWayOfTheOpenHandTranquilityDescription	You gain advantage on all Dexterity (Stealth) checks.
 Subclass/&MonkSubclassWayOfThePyrokineTitle Way of the Searing Flame
 Subclass/&MonkSubclassWayOfThePyrokineDescription When you look into flames they don't just look back at you, they gaze into your soul and light the eternal fire burning within. With practice and discipline you harness this internal blaze, manifesting it to make your strikes scorch flesh, your blows singeing foes.
 Feature/&MonkSubclassWayOfThePyrokineTechniqueTitle Blazing Technique
@@ -76,6 +78,8 @@ Feature/&MonkSubclassWayOfThePyrokineBlindDescription Target must succeed on a W
 Reaction/&SpendMonkSubclassWayOfThePyrokineBlindPowerReactDescription Attmept to blind the target.
 Feature/&MonkSubclassWayOfThePyrokineBurningDevotionTitle Burning Devotion
 Feature/&MonkSubclassWayOfThePyrokineBurningDevotionDescription At 6th level, you gain resistance to fire damage.
+Feature/&MonkSubclassWayOfThePyrokineLeapingFlamesTitle	Leaping Flames
+Feature/&MonkSubclassWayOfThePyrokineLeapingFlamesDescription	You gain advantage on all your Dexterity (Acrobatics) checks.
 Subclass/&MonkSubclassWayOfIronTitle Way of Iron
 Subclass/&MonkSubclassWayOfIronDescription The monasteries scattered across the face of the world offer ways to attain enlightenment. What enlightenment means varies from monastery to monastery. For some, it could be to unite body and mind to transcend the limits of the physical form and for others, it might mean to become one with the universe.\nAdherents to the Way of Iron seek tranquility in the art of combat. Unlike other monastic traditions, the Way of Iron focuses on the use of weapons, treating them as extensions of the monk’s own body. Followers of the Way of Iron are usually front-line combatants, leaving their temples behind to join in the dance of battle shoulder-to-shoulder with the rank and file soldiers. Grandmasters of the Way of Iron wield any weapon with such grace and ease that the weapons seem to have always been a part of them, the way a hand or an eye would be, and their movement and attacks are full of graceful arcs and twirling flourishes that make battle seem to be more of a dance than a conflict.\nAdherents to the Way of Iron train relentlessly with one another, and are among the most exceptional duelists in the world, having honed their skill against the best warriors their temples have to offer.
 Feature/&MonkSubclassWayOfIronRoilingStormOfIronTitle Roiling Storm of Iron
@@ -86,3 +90,5 @@ Feature/&MonkSubclassWayOfIronTestOfSkillTitle Test of Skill
 Feature/&MonkSubclassWayOfIronTestOfSkillDescription You can compel other creatures to engage you in a test of martial skill. One creature that you can see that is within 30 feet of you and that can hear and understand you must make a Wisdom saving throw. On a failed save, for 1 minute the creature has disadvantage on attack rolls made against creatures other than you. This effect ends if a creature friendly to you damages the affected creature or casts a harmful spell on it.
 Rules/&ConditionMonkSubclassWayOfIronTestOfSkillTitle	Compelled to Test of Skill
 Rules/&ConditionMonkSubclassWayOfIronTestOfSkillDescription	Disadvantage on attack rolls made against creatures other than caster.
+Feature/&MonkSubclassWayOfIronWhirlwindOfIronTitle	Whirlwind Of Steel
+Feature/&MonkSubclassWayOfIronWhirlwindOfIronDescription	Beginning at 11th level, when you would use a bonus action to make one or more unarmed attacks (either the attack granted by your Martial Arts feature, or when spending a ki point to make a Flurry of Blows), you can make attacks with monk weapons instead.
